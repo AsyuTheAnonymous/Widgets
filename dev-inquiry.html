@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Design Inquiry Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .step.completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + span {
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .budget-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .budget-option {
+            position: relative;
+        }
+
+        .budget-option input[type="radio"] {
+            display: none;
+        }
+
+        .budget-option label {
+            display: block;
+            padding: 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+        }
+
+        .budget-option input[type="radio"]:checked + label {
+            border-color: #3498db;
+            background: #3498db;
+            color: white;
+        }
+
+        .timeline-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .timeline-option {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .timeline-option input[type="radio"] {
+            display: none;
+        }
+
+        .timeline-option label {
+            display: block;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+        }
+
+        .timeline-option input[type="radio"]:checked + label {
+            border-color: #27ae60;
+            background: #27ae60;
+            color: white;
+        }
+
+        .inspiration-upload {
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .inspiration-upload:hover {
+            border-color: #3498db;
+            color: #3498db;
+        }
+
+        .inspiration-upload input[type="file"] {
+            display: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-prev:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-next, .btn-submit {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .btn-next:hover, .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .price-estimate {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .price-estimate h3 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+
+        .price-range {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .budget-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-options {
+                flex-direction: column;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Website Design Inquiry</h1>
+            <p>Let's bring your vision to life with a custom website</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="step-indicator">
+                <div class="step active" data-step="1">1</div>
+                <div class="step" data-step="2">2</div>
+                <div class="step" data-step="3">3</div>
+                <div class="step" data-step="4">4</div>
+            </div>
+
+            <form id="designForm">
+                <!-- Step 1: Basic Information -->
+                <div class="form-step active" data-step="1">
+                    <h2>📋 Tell Us About Your Project</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Business/Organization Name <span class="required">*</span></label>
+                        <input type="text" id="company" name="company" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="currentWebsite">Current Website (if any)</label>
+                        <input type="url" id="currentWebsite" name="currentWebsite" placeholder="https://yourwebsite.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectDescription">Brief Project Description <span class="required">*</span></label>
+                        <textarea id="projectDescription" name="projectDescription" placeholder="Tell us about your business and what you want to achieve with your new website..." required></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 2: Website Type & Features -->
+                <div class="form-step" data-step="2">
+                    <h2>🏗️ Website Type & Features</h2>
+                    
+                    <div class="form-group">
+                        <label for="websiteType">What type of website do you need? <span class="required">*</span></label>
+                        <select id="websiteType" name="websiteType" required>
+                            <option value="">Select website type...</option>
+                            <option value="business">🏢 Business/Corporate Website</option>
+                            <option value="ecommerce">🛒 E-commerce Store</option>
+                            <option value="portfolio">🎨 Portfolio/Creative Showcase</option>
+                            <option value="blog">📝 Blog/News Website</option>
+                            <option value="nonprofit">🤝 Non-profit Organization</option>
+                            <option value="restaurant">🍽️ Restaurant/Food Service</option>
+                            <option value="medical">🏥 Medical/Healthcare</option>
+                            <option value="real-estate">🏠 Real Estate</option>
+                            <option value="education">🎓 Educational Institution</option>
+                            <option value="other">❓ Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What features do you need? (Select all that apply)</label>
+                        <div class="checkbox-grid">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="contact-form" name="features[]" value="contact-form">
+                                <span>📧 Contact Forms</span>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="online-store" name="features[]" value="online-store">
+                                <span>🛍️ Online Store</span>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="booking" name="features[]" value="booking">
+                                <span>📅 Online Booking</span>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="gallery" name="features[]" value="gallery">
+                                <span>🖼️ Photo Gallery</span>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="blog" name="features[]" value="blog">
+                                <span>📝 Blog/News Section</span>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="social-media" name="features[]" value="social-media">
+                                <span>📱 Social Media Integration</span>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="live-chat" name="features[]" value="live-chat">
+                                <span>💬 Live Chat</span>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="member-login" name="features[]" value="member-login">
+                                <span>👤 Member Login Area</span>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="seo" name="features[]" value="seo">
+                                <span>🔍 SEO Optimization</span>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="analytics" name="features[]" value="analytics">
+                                <span>📊 Analytics Setup</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pages">Approximately how many pages will your website need? <span class="required">*</span></label>
+                        <select id="pages" name="pages" required>
+                            <option value="">Select page count...</option>
+                            <option value="1-5">1-5 pages (Simple)</option>
+                            <option value="6-10">6-10 pages (Medium)</option>
+                            <option value="11-20">11-20 pages (Large)</option>
+                            <option value="20+">20+ pages (Complex)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 3: Design Preferences -->
+                <div class="form-step" data-step="3">
+                    <h2>🎨 Design Preferences</h2>
+                    
+                    <div class="form-group">
+                        <label for="designStyle">What design style appeals to you?</label>
+                        <select id="designStyle" name="designStyle">
+                            <option value="">Select a style...</option>
+                            <option value="modern">✨ Modern & Minimalist</option>
+                            <option value="corporate">💼 Professional & Corporate</option>
+                            <option value="creative">🎨 Creative & Artistic</option>
+                            <option value="fun">🎉 Fun & Playful</option>
+                            <option value="elegant">👑 Elegant & Luxurious</option>
+                            <option value="rustic">🌿 Rustic & Natural</option>
+                            <option value="tech">⚡ Tech & Futuristic</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="colorPrefs">Do you have specific color preferences?</label>
+                        <textarea id="colorPrefs" name="colorPrefs" placeholder="Describe your preferred colors or color schemes..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inspiration">Websites you like (inspiration)</label>
+                        <textarea id="inspiration" name="inspiration" placeholder="List any websites you admire and what you like about them..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload inspiration images, logos, or reference materials</label>
+                        <div class="inspiration-upload">
+                            <input type="file" id="inspirationFiles" name="inspiration[]" multiple accept="image/*,.pdf">
+                            <label for="inspirationFiles">
+                                📎 Click to upload files<br>
+                                <small>Images, PDFs, logos, color palettes, etc.</small>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contentReady">Do you have content ready (text, images, etc.)?</label>
+                        <select id="contentReady" name="contentReady">
+                            <option value="yes">✅ Yes, I have everything ready</option>
+                            <option value="partial">⚠️ I have some content</option>
+                            <option value="no">❌ No, I need help creating content</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 4: Budget & Timeline -->
+                <div class="form-step" data-step="4">
+                    <h2>💰 Budget & Timeline</h2>
+                    
+                    <div class="form-group">
+                        <label>What's your budget range for this project? <span class="required">*</span></label>
+                        <div class="budget-options">
+                            <div class="budget-option">
+                                <input type="radio" id="budget1" name="budget" value="under-1000" required>
+                                <label for="budget1">Under $1,000</label>
+                            </div>
+                            <div class="budget-option">
+                                <input type="radio" id="budget2" name="budget" value="1000-2500" required>
+                                <label for="budget2">$1,000 - $2,500</label>
+                            </div>
+                            <div class="budget-option">
+                                <input type="radio" id="budget3" name="budget" value="2500-5000" required>
+                                <label for="budget3">$2,500 - $5,000</label>
+                            </div>
+                            <div class="budget-option">
+                                <input type="radio" id="budget4" name="budget" value="5000-10000" required>
+                                <label for="budget4">$5,000 - $10,000</label>
+                            </div>
+                            <div class="budget-option">
+                                <input type="radio" id="budget5" name="budget" value="over-10000" required>
+                                <label for="budget5">$10,000+</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>When do you need the website completed? <span class="required">*</span></label>
+                        <div class="timeline-options">
+                            <div class="timeline-option">
+                                <input type="radio" id="timeline1" name="timeline" value="asap" required>
+                                <label for="timeline1">🚀 ASAP</label>
+                            </div>
+                            <div class="timeline-option">
+                                <input type="radio" id="timeline2" name="timeline" value="1-month" required>
+                                <label for="timeline2">📅 1 Month</label>
+                            </div>
+                            <div class="timeline-option">
+                                <input type="radio" id="timeline3" name="timeline" value="2-3-months" required>
+                                <label for="timeline3">⏰ 2-3 Months</label>
+                            </div>
+                            <div class="timeline-option">
+                                <input type="radio" id="timeline4" name="timeline" value="flexible" required>
+                                <label for="timeline4">🤝 Flexible</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalInfo">Anything else we should know?</label>
+                        <textarea id="additionalInfo" name="additionalInfo" placeholder="Special requirements, questions, concerns, or additional details..."></textarea>
+                    </div>
+
+                    <div id="priceEstimate" class="price-estimate" style="display: none;">
+                        <h3>💡 Estimated Project Range</h3>
+                        <div class="price-range" id="priceRange"></div>
+                        <p><small>This is a rough estimate. Final pricing will depend on specific requirements discussed in consultation.</small></p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-prev" id="prevBtn" style="display: none;">← Previous</button>
+                    <button type="button" class="btn btn-next" id="nextBtn">Next →</button>
+                    <button type="submit" class="btn btn-submit" id="submitBtn" style="display: none;">🚀 Submit Inquiry</button>
+                </div>
+
+                <div id="successMessage" class="success-message">
+                    <h3>✅ Inquiry Submitted Successfully!</h3>
+                    <p>Thank you for your interest! We'll review your project details and get back to you within 24 hours with a detailed proposal and next steps.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        // Navigation
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (validateStep(currentStep)) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            }
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active', 'completed'));
+            
+            // Show current step
+            document.querySelector(`[data-step="${step}"]`).classList.add('active');
+            document.querySelector(`.step[data-step="${step}"]`).classList.add('active');
+            
+            // Mark completed steps
+            for (let i = 1; i < step; i++) {
+                document.querySelector(`.step[data-step="${i}"]`).classList.add('completed');
+            }
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').style.display = step > 1 ? 'block' : 'none';
+            document.getElementById('nextBtn').style.display = step < totalSteps ? 'block' : 'none';
+            document.getElementById('submitBtn').style.display = step === totalSteps ? 'block' : 'none';
+            
+            // Show price estimate on last step
+            if (step === totalSteps) {
+                updatePriceEstimate();
+            }
+        }
+
+        function validateStep(step) {
+            const currentStepEl = document.querySelector(`[data-step="${step}"]`);
+            const requiredFields = currentStepEl.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#27ae60';
+                }
+            });
+            
+            return isValid;
+        }
+
+        function updatePriceEstimate() {
+            const websiteType = document.getElementById('websiteType').value;
+            const pages = document.getElementById('pages').value;
+            const features = document.querySelectorAll('input[name="features[]"]:checked').length;
+            const budget = document.querySelector('input[name="budget"]:checked')?.value;
+            
+            // Simple pricing logic
+            let basePrice = 500;
+            
+            // Website type multiplier
+            const typeMultipliers = {
+                'business': 1.2,
+                'ecommerce': 2.0,
+                'portfolio': 1.0,
+                'blog': 0.8,
+                'nonprofit': 0.9,
+                'restaurant': 1.3,
+                'medical': 1.5,
+                'real-estate': 1.4,
+                'education': 1.1,
+                'other': 1.0
+            };
+            
+            basePrice *= typeMultipliers[websiteType] || 1.0;
+            
+            // Page count multiplier
+            const pageMultipliers = {
+                '1-5': 1.0,
+                '6-10': 1.5,
+                '11-20': 2.0,
+                '20+': 3.0
+            };
+            
+            basePrice *= pageMultipliers[pages] || 1.0;
+            
+            // Feature additions
+            basePrice += features * 200;
+            
+            const minPrice = Math.round(basePrice);
+            const maxPrice = Math.round(basePrice * 1.5);
+            
+            document.getElementById('priceRange').textContent = `$${minPrice.toLocaleString()} - $${maxPrice.toLocaleString()}`;
+            document.getElementById('priceEstimate').style.display = 'block';
+        }
+
+        // Form submission
+        document.getElementById('designForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '⏳ Submitting...';
+            submitBtn.disabled = true;
+            
+            // Collect all form data
+            const formData = new FormData(this);
+            
+            // Get selected features
+            const features = Array.from(document.querySelectorAll('input[name="features[]"]:checked'))
+                .map(cb => cb.value);
+            
+            // Simulate submission
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'block';
+                this.style.display = 'none';
+                
+                // Log form data for development
+                console.log('Design Inquiry Data:', {
+                    personalInfo: {
+                        name: formData.get('firstName') + ' ' + formData.get('lastName'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone'),
+                        company: formData.get('company')
+                    },
+                    project: {
+                        type: formData.get('websiteType'),
+                        pages: formData.get('pages'),
+                        features: features,
+                        description: formData.get('projectDescription')
+                    },
+                    design: {
+                        style: formData.get('designStyle'),
+                        colors: formData.get('colorPrefs'),
+                        inspiration: formData.get('inspiration'),
+                        contentReady: formData.get('contentReady')
+                    },
+                    budget: formData.get('budget'),
+                    timeline: formData.get('timeline')
+                });
+            }, 2000);
+        });
+
+        // Enhanced file handling
+        document.getElementById('inspirationFiles').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            const label = document.querySelector('.inspiration-upload label');
+            
+            if (files.length > 0) {
+                label.innerHTML = `📎 ${files.length} file(s) selected<br><small>Click to change files</small>`;
+            }
+        });
+    </script>
+</body>
+</html>
