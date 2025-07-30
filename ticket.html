@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Support Ticket Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .priority-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        .priority-option {
+            flex: 1;
+        }
+
+        .priority-option input[type="radio"] {
+            display: none;
+        }
+
+        .priority-option label {
+            display: block;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .priority-option input[type="radio"]:checked + label {
+            border-color: #3498db;
+            background: #3498db;
+            color: white;
+        }
+
+        .priority-low label { background: #f8f9fa; }
+        .priority-normal label { background: #fff3cd; }
+        .priority-high label { background: #f8d7da; }
+        .priority-urgent label { background: #d1ecf1; }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px 15px;
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            text-align: center;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload:hover .file-upload-label {
+            border-color: #3498db;
+            color: #3498db;
+        }
+
+        .file-list {
+            margin-top: 10px;
+        }
+
+        .file-item {
+            padding: 8px 12px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-remove {
+            color: #e74c3c;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .info-box {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box h3 {
+            color: #2980b9;
+            margin-bottom: 5px;
+        }
+
+        .info-box p {
+            color: #34495e;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .priority-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 IT Support Ticket</h1>
+            <p>Get professional help with your technical issues</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="info-box">
+                <h3>📞 Need Immediate Help?</h3>
+                <p>For urgent issues, call us at <strong>(555) 123-4567</strong> | Email: support@yourcompany.com</p>
+            </div>
+
+            <form id="ticketForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="company">Company/Organization</label>
+                    <input type="text" id="company" name="company">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Issue Category <span class="required">*</span></label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category...</option>
+                            <option value="hardware">🖥️ Hardware Issues</option>
+                            <option value="software">💻 Software Problems</option>
+                            <option value="network">🌐 Network/Internet Issues</option>
+                            <option value="email">📧 Email Problems</option>
+                            <option value="website">🌍 Website Issues</option>
+                            <option value="hosting">☁️ Web Hosting</option>
+                            <option value="security">🔒 Security Concerns</option>
+                            <option value="backup">💾 Backup/Recovery</option>
+                            <option value="other">❓ Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact">Preferred Contact Method</label>
+                        <select id="contact" name="contact">
+                            <option value="email">📧 Email</option>
+                            <option value="phone">📞 Phone Call</option>
+                            <option value="remote">🖥️ Remote Session</option>
+                            <option value="onsite">🏢 On-site Visit</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Priority Level <span class="required">*</span></label>
+                    <div class="priority-options">
+                        <div class="priority-option priority-low">
+                            <input type="radio" id="low" name="priority" value="low" required>
+                            <label for="low">🟢 Low<br><small>Can wait</small></label>
+                        </div>
+                        <div class="priority-option priority-normal">
+                            <input type="radio" id="normal" name="priority" value="normal" required>
+                            <label for="normal">🟡 Normal<br><small>Few days</small></label>
+                        </div>
+                        <div class="priority-option priority-high">
+                            <input type="radio" id="high" name="priority" value="high" required>
+                            <label for="high">🟠 High<br><small>Same day</small></label>
+                        </div>
+                        <div class="priority-option priority-urgent">
+                            <input type="radio" id="urgent" name="priority" value="urgent" required>
+                            <label for="urgent">🔴 Urgent<br><small>ASAP</small></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Issue Summary <span class="required">*</span></label>
+                    <input type="text" id="subject" name="subject" placeholder="Brief description of the problem" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Detailed Description <span class="required">*</span></label>
+                    <textarea id="description" name="description" placeholder="Please provide detailed information about the issue, including:
+• What were you trying to do?
+• What happened instead?
+• Any error messages you saw?
+• When did this start happening?
+• What troubleshooting steps have you already tried?" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Attach Files (Screenshots, Error Logs, etc.)</label>
+                    <div class="file-upload">
+                        <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.gif,.pdf,.txt,.doc,.docx,.zip">
+                        <label for="fileInput" class="file-upload-label">
+                            📎 Click to attach files or drag and drop<br>
+                            <small>Supported: Images, PDFs, Documents, ZIP files (Max 10MB each)</small>
+                        </label>
+                    </div>
+                    <div id="fileList" class="file-list"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">🚀 Submit Ticket</button>
+                
+                <div id="successMessage" class="success-message">
+                    <h3>✅ Ticket Submitted Successfully!</h3>
+                    <p>Thank you for contacting us. We've received your support request and will respond within 24 hours. You'll receive a confirmation email shortly.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // File handling
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        let selectedFiles = [];
+
+        fileInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (file.size <= 10 * 1024 * 1024) { // 10MB limit
+                    selectedFiles.push(file);
+                    displayFile(file);
+                } else {
+                    alert(`File "${file.name}" is too large. Maximum size is 10MB.`);
+                }
+            });
+        });
+
+        function displayFile(file) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <span>📄 ${file.name} (${formatFileSize(file.size)})</span>
+                <span class="file-remove" onclick="removeFile('${file.name}')">✕</span>
+            `;
+            fileList.appendChild(fileItem);
+        }
+
+        function removeFile(fileName) {
+            selectedFiles = selectedFiles.filter(file => file.name !== fileName);
+            const fileItems = fileList.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                if (item.textContent.includes(fileName)) {
+                    item.remove();
+                }
+            });
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Form submission
+        document.getElementById('ticketForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            
+            // Add selected files
+            selectedFiles.forEach(file => {
+                formData.append('attachments[]', file);
+            });
+            
+            // Simulate form submission
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '⏳ Submitting...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'block';
+                this.style.display = 'none';
+                
+                // Here you would normally send the data to your server
+                console.log('Form Data:', Object.fromEntries(formData));
+                console.log('Files:', selectedFiles);
+            }, 2000);
+        });
+
+        // Enhanced form validation
+        const requiredFields = document.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+            field.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    this.style.borderColor = '#27ae60';
+                }
+            });
+        });
+
+        // Priority selection enhancement
+        const priorityOptions = document.querySelectorAll('input[name="priority"]');
+        priorityOptions.forEach(option => {
+            option.addEventListener('change', function() {
+                // Add visual feedback for priority selection
+                const allLabels = document.querySelectorAll('.priority-option label');
+                allLabels.forEach(label => label.style.transform = 'scale(1)');
+                
+                if (this.checked) {
+                    this.nextElementSibling.style.transform = 'scale(1.05)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
