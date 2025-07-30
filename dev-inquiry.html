@@ -82,7 +82,7 @@
         }
 
         .form-step.active {
-            display: block;
+            display: block !important;
         }
 
         .form-group {
@@ -605,7 +605,48 @@
 
                 <div id="successMessage" class="success-message">
                     <h3>✅ Inquiry Submitted Successfully!</h3>
-                    <p>Thank you for your interest! We'll review your project details and get back to you within 24 hours with a detailed proposal and next steps.</p>
+                    <p>Thank you for your interest! We'll review your project details and get back to you within 24 hours with a detailed proposal.</p>
+                    
+                    <div style="margin-top: 20px; text-align: left;">
+                        <h4 style="color: #2c3e50; margin-bottom: 15px;">🚀 What Happens Next:</h4>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #3498db; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">1</span>
+                                <span><strong>Within 2 Hours:</strong> You'll receive a confirmation email with your inquiry reference number</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #3498db; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">2</span>
+                                <span><strong>Within 24 Hours:</strong> Our team will review your requirements and prepare a detailed proposal</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #3498db; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">3</span>
+                                <span><strong>Within 48 Hours:</strong> We'll schedule a free 30-minute consultation call to discuss your vision</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #27ae60; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">4</span>
+                                <span><strong>After Consultation:</strong> You'll receive a custom proposal with timeline, pricing, and project roadmap</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #3498db;">
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">📋 What to Prepare for Our Call:</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #34495e;">
+                            <li>Any additional reference websites or design ideas</li>
+                            <li>Your brand guidelines, logos, or existing marketing materials</li>
+                            <li>List of specific functionalities you'd like to discuss</li>
+                            <li>Questions about our process, hosting, or ongoing support</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 8px; text-align: center;">
+                        <p style="margin: 0; color: #27ae60; font-weight: 600;">🎯 Our Goal: Create a website that drives real results for your business</p>
+                    </div>
+                    
+                    <div style="margin-top: 20px; text-align: center;">
+                        <p style="margin-bottom: 10px; color: #7f8c8d;">Questions in the meantime?</p>
+                        <p style="margin: 0;"><strong>📞 (555) 123-4567</strong> | <strong>📧 hello@yourcompany.com</strong></p>
+                    </div>
                 </div>
             </form>
         </div>
@@ -634,16 +675,31 @@
 
         function showStep(step) {
             // Hide all steps
-            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.form-step').forEach(s => {
+                s.classList.remove('active');
+                s.style.display = 'none';
+            });
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active', 'completed'));
             
             // Show current step
-            document.querySelector(`[data-step="${step}"]`).classList.add('active');
-            document.querySelector(`.step[data-step="${step}"]`).classList.add('active');
+            const currentFormStep = document.querySelector(`.form-step[data-step="${step}"]`);
+            const currentStepIndicator = document.querySelector(`.step[data-step="${step}"]`);
+            
+            if (currentFormStep) {
+                currentFormStep.classList.add('active');
+                currentFormStep.style.display = 'block';
+            }
+            
+            if (currentStepIndicator) {
+                currentStepIndicator.classList.add('active');
+            }
             
             // Mark completed steps
             for (let i = 1; i < step; i++) {
-                document.querySelector(`.step[data-step="${i}"]`).classList.add('completed');
+                const completedStep = document.querySelector(`.step[data-step="${i}"]`);
+                if (completedStep) {
+                    completedStep.classList.add('completed');
+                }
             }
             
             // Update navigation buttons
