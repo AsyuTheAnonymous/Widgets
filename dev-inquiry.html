@@ -362,7 +362,19 @@
                 <div class="step" data-step="4">4</div>
             </div>
 
-            <form id="designForm">
+            <form id="designForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <!-- Hidden fields for FormSpree -->
+                <input type="hidden" name="_subject" value="New Website Design Inquiry">
+                <input type="hidden" name="_next" value="">
+                <input type="hidden" name="_captcha" value="false">
+                
+                <!-- Honeypot field for spam protection -->
+                <input type="text" name="_gotcha" style="display:none;">
+                
+                <!-- Collected data fields (hidden, populated by JS) -->
+                <input type="hidden" name="selected_features" id="selectedFeatures">
+                <input type="hidden" name="form_step_completed" value="4">
+                <input type="hidden" name="price_estimate" id="priceEstimateField">
                 <!-- Step 1: Basic Information -->
                 <div class="form-step active" data-step="1">
                     <h2>📋 Tell Us About Your Project</h2>
@@ -779,48 +791,54 @@
         document.getElementById('designForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            if (!validateStep(4)) {
+                return;
+            }
+            
+            // Collect selected features
+            const features = Array.from(document.querySelectorAll('input[name="features[]"]:checked'))
+                .map(cb => cb.value)
+                .join(', ');
+            
+            // Update hidden fields with collected data
+            document.getElementById('selectedFeatures').value = features;
+            document.getElementById('priceEstimateField').value = document.getElementById('priceRange').textContent;
+            
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.innerHTML;
             
             submitBtn.innerHTML = '⏳ Submitting...';
             submitBtn.disabled = true;
             
-            // Collect all form data
+            // Create FormData and submit to FormSpree
             const formData = new FormData(this);
             
-            // Get selected features
-            const features = Array.from(document.querySelectorAll('input[name="features[]"]:checked'))
-                .map(cb => cb.value);
-            
-            // Simulate submission
-            setTimeout(() => {
-                document.getElementById('successMessage').style.display = 'block';
-                this.style.display = 'none';
-                
-                // Log form data for development
-                console.log('Design Inquiry Data:', {
-                    personalInfo: {
-                        name: formData.get('firstName') + ' ' + formData.get('lastName'),
-                        email: formData.get('email'),
-                        phone: formData.get('phone'),
-                        company: formData.get('company')
-                    },
-                    project: {
-                        type: formData.get('websiteType'),
-                        pages: formData.get('pages'),
-                        features: features,
-                        description: formData.get('projectDescription')
-                    },
-                    design: {
-                        style: formData.get('designStyle'),
-                        colors: formData.get('colorPrefs'),
-                        inspiration: formData.get('inspiration'),
-                        contentReady: formData.get('contentReady')
-                    },
-                    budget: formData.get('budget'),
-                    timeline: formData.get('timeline')
-                });
-            }, 2000);
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Success
+                    document.getElementById('successMessage').style.display = 'block';
+                    this.style.display = 'none';
+                } else {
+                    // Error from FormSpree
+                    return response.json().then(data => {
+                        throw new Error(data.error || 'Something went wrong');
+                    });
+                }
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('Error:', error);
+                alert('There was an error submitting your inquiry. Please try again or contact us directly.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
         });
 
         // Enhanced file handling
