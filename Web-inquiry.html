@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Project Inquiry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen">
+
+<section class="slide">
+  <div class="overlay">
+    <div class="content">
+      <h1 class="title">🚀 Website Project Inquiry</h1>
+      <p class="subtitle">Let us know what you need — pricing is calculated automatically!</p>
+
+      <form id="inquiryForm" class="w-full max-w-3xl mx-auto text-left text-white space-y-6 mt-8">
+        <!-- Website Type -->
+        <div>
+          <label for="websiteType" class="block font-semibold mb-2">What type of website do you need? *</label>
+          <select id="websiteType" name="websiteType" required
+            class="w-full bg-black bg-opacity-50 border border-cyan-500 rounded-lg p-3 text-white">
+            <option value="">Select website plan...</option>
+            <option value="basic">🔹 Basic Plan</option>
+            <option value="advanced">🔸 Advanced Plan (+$300)</option>
+          </select>
+        </div>
+
+        <!-- Features -->
+        <div>
+          <label class="block font-semibold mb-2">What features do you need? (Select all that apply)</label>
+          <div class="features-grid" id="featuresGrid">
+            <div class="feature-item" data-value="100" data-name="contact" id="feature-1">
+              <span class="feature-emoji">📩</span>
+              <span class="feature-name">Contact Forms</span>
+              <span class="feature-price">+$100</span>
+            </div>
+            <div class="feature-item" data-value="250" data-name="store" id="feature-2">
+              <span class="feature-emoji">🛒</span>
+              <span class="feature-name">Online Store</span>
+              <span class="feature-price">+$250</span>
+            </div>
+            <div class="feature-item" data-value="300" data-name="booking" id="feature-3">
+              <span class="feature-emoji">📅</span>
+              <span class="feature-name">Online Booking</span>
+              <span class="feature-price">+$300</span>
+            </div>
+            <div class="feature-item" data-value="100" data-name="gallery" id="feature-4">
+              <span class="feature-emoji">🖼️</span>
+              <span class="feature-name">Photo Gallery</span>
+              <span class="feature-price">+$100</span>
+            </div>
+            <div class="feature-item" data-value="200" data-name="blog" id="feature-5">
+              <span class="feature-emoji">📝</span>
+              <span class="feature-name">Blog/News</span>
+              <span class="feature-price">+$200</span>
+            </div>
+            <div class="feature-item" data-value="100" data-name="social" id="feature-6">
+              <span class="feature-emoji">🌐</span>
+              <span class="feature-name">Social Media</span>
+              <span class="feature-price">+$100</span>
+            </div>
+            <div class="feature-item" data-value="150" data-name="livechat" id="feature-7">
+              <span class="feature-emoji">💬</span>
+              <span class="feature-name">Live Chat</span>
+              <span class="feature-price">+$150</span>
+            </div>
+            <div class="feature-item" data-value="500" data-name="login" id="feature-8">
+              <span class="feature-emoji">👤</span>
+              <span class="feature-name">Member Login</span>
+              <span class="feature-price">+$500</span>
+            </div>
+            <div class="feature-item" data-value="75" data-name="analytics" id="feature-9">
+              <span class="feature-emoji">📈</span>
+              <span class="feature-name">Analytics</span>
+              <span class="feature-price">+$75</span>
+            </div>
+            <div class="feature-item" data-value="150" data-name="newsletter" id="feature-10">
+              <span class="feature-emoji">📧</span>
+              <span class="feature-name">Email Newsletter</span>
+              <span class="feature-price">+$150</span>
+            </div>
+            <div class="feature-item" data-value="400" data-name="multilang" id="feature-11">
+              <span class="feature-emoji">🌍</span>
+              <span class="feature-name">Multi-Language</span>
+              <span class="feature-price">+$400</span>
+            </div>
+            <div class="feature-item" data-value="250" data-name="customforms" id="feature-12">
+              <span class="feature-emoji">📋</span>
+              <span class="feature-name">Custom Forms</span>
+              <span class="feature-price">+$250</span>
+            </div>
+            <div class="feature-item" data-value="400" data-name="chatbot" id="feature-13">
+              <span class="feature-emoji">🤖</span>
+              <span class="feature-name">AI Chatbot</span>
+              <span class="feature-price">+$400</span>
+            </div>
+            <div class="feature-item" data-value="125" data-name="backup" id="feature-14">
+              <span class="feature-emoji">🔄</span>
+              <span class="feature-name">Backups/Maintenance</span>
+              <span class="feature-price">+$125</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Number of Pages -->
+        <div>
+          <label for="pageCount" class="block font-semibold mb-2">Enter number of pages ($100/page)</label>
+          <input type="number" id="pageCount" name="pageCount" min="1" value="3"
+            class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white">
+        </div>
+
+        <!-- Design Preferences -->
+        <div>
+          <label for="designStyle" class="block font-semibold mb-2">What design style appeals to you?</label>
+          <select id="designStyle" name="designStyle"
+            class="w-full bg-black bg-opacity-40 border border-cyan-500 rounded-lg p-3 text-white">
+            <option value="">Select a style...</option>
+            <option>Minimal & Clean</option>
+            <option>Dark & Futuristic</option>
+            <option>Colorful & Bold</option>
+            <option>Professional & Corporate</option>
+            <option>Other (explain below)</option>
+          </select>
+        </div>
+
+        <!-- Color Preferences -->
+        <div>
+          <label for="colors" class="block font-semibold mb-2">Do you have specific color preferences?</label>
+          <textarea id="colors" name="colors" rows="2"
+            class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white"></textarea>
+        </div>
+
+        <!-- Website Inspirations -->
+        <div>
+          <label for="inspirations" class="block font-semibold mb-2">Websites you like (inspiration)</label>
+          <textarea id="inspirations" name="inspirations" rows="2"
+            class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white"></textarea>
+        </div>
+
+        <!-- Screenshot Upload Section -->
+        <div>
+          <label for="screenshots" class="block font-semibold mb-2">📸 Upload Screenshots (Design inspiration, mockups, etc.)</label>
+          <div class="upload-container">
+            <input type="file" id="screenshots" name="screenshots" multiple accept="image/*"
+              class="file-input">
+            <div class="upload-area" id="uploadArea">
+              <div class="upload-content">
+                <span class="upload-icon">📁</span>
+                <p class="upload-text">Click to upload or drag and drop images here</p>
+                <p class="upload-subtext">PNG, JPG, GIF up to 10MB each</p>
+              </div>
+            </div>
+          </div>
+          <div id="filePreview" class="file-preview"></div>
+        </div>
+
+        <!-- Project Description -->
+        <div>
+          <label for="projectDesc" class="block font-semibold mb-2">Project description (special requests, ideas, etc.)</label>
+          <textarea id="projectDesc" name="projectDesc" rows="4"
+            class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white"></textarea>
+        </div>
+
+        <!-- Cost Output -->
+        <div class="pt-6 border-t border-cyan-500">
+          <p class="font-bold text-xl">💰 Estimated Cost: <span id="totalCost" class="text-cyan-400">$0</span></p>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center pt-6">
+          <button type="submit"
+            class="bg-cyan-500 text-black font-bold py-3 px-8 rounded-full hover:bg-cyan-400 transition-all duration-300 shadow-lg shadow-cyan-500/30">
+            Submit Inquiry
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('inquiryForm');
+  const costDisplay = document.getElementById('totalCost');
+  const pages = document.getElementById('pageCount');
+  const websiteType = document.getElementById('websiteType');
+  const fileInput = document.getElementById('screenshots');
+  const uploadArea = document.getElementById('uploadArea');
+  const filePreview = document.getElementById('filePreview');
+  const featureItems = document.querySelectorAll('.feature-item');
+
+  let uploadedFiles = [];
+  let selectedFeatures = new Set();
+
+  function calculateCost() {
+    let cost = 0;
+    const base = websiteType.value === 'basic' ? 0 : websiteType.value === 'advanced' ? 300 : 0;
+    cost += base;
+
+    selectedFeatures.forEach(featureValue => {
+      cost += parseInt(featureValue);
+    });
+
+    const pageCost = parseInt(pages.value || 0) * 100;
+    cost += pageCost;
+
+    costDisplay.textContent = `$${cost.toLocaleString()}`;
+  }
+
+  // Feature selection functionality
+  function updateAvailableFeatures() {
+    const selectedPlan = websiteType.value;
+    
+    // Define which features are available for each plan
+    const basicPlanFeatures = ['contact', 'booking', 'gallery', 'blog', 'social', 'livechat', 'analytics', 'newsletter', 'multilang', 'customforms', 'backup'];
+    
+    featureItems.forEach(item => {
+      const featureName = item.dataset.name;
+      const value = item.dataset.value;
+      
+      if (selectedPlan === '') {
+        // No plan selected - hide all features
+        item.style.display = 'none';
+        if (selectedFeatures.has(value)) {
+          selectedFeatures.delete(value);
+          item.classList.remove('selected');
+        }
+      } else if (selectedPlan === 'basic') {
+        if (basicPlanFeatures.includes(featureName)) {
+          item.style.display = 'flex';
+          item.classList.remove('disabled');
+        } else {
+          item.style.display = 'none';
+          item.classList.add('disabled');
+          // Remove from selection if it was selected
+          if (selectedFeatures.has(value)) {
+            selectedFeatures.delete(value);
+            item.classList.remove('selected');
+          }
+        }
+      } else if (selectedPlan === 'advanced') {
+        item.style.display = 'flex';
+        item.classList.remove('disabled');
+      }
+    });
+    
+    calculateCost();
+  }
+
+  featureItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // Don't allow selection if feature is disabled or hidden
+      if (item.classList.contains('disabled') || item.style.display === 'none') {
+        return;
+      }
+      
+      const value = item.dataset.value;
+      
+      if (selectedFeatures.has(value)) {
+        selectedFeatures.delete(value);
+        item.classList.remove('selected');
+      } else {
+        selectedFeatures.add(value);
+        item.classList.add('selected');
+      }
+      
+      calculateCost();
+    });
+  });
+
+  // File upload functionality
+  function handleFiles(files) {
+    Array.from(files).forEach(file => {
+      if (file.type.startsWith('image/') && file.size <= 10 * 1024 * 1024) {
+        uploadedFiles.push(file);
+        displayFilePreview(file);
+      } else {
+        alert(`File "${file.name}" is either not an image or exceeds 10MB limit.`);
+      }
+    });
+  }
+
+  function displayFilePreview(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const previewItem = document.createElement('div');
+      previewItem.className = 'preview-item';
+      previewItem.innerHTML = `
+        <img src="${e.target.result}" alt="${file.name}" class="preview-image">
+        <div class="preview-info">
+          <span class="file-name">${file.name}</span>
+          <button type="button" class="remove-file" onclick="removeFile('${file.name}')">×</button>
+        </div>
+      `;
+      filePreview.appendChild(previewItem);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeFile(fileName) {
+    uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+    updateFilePreview();
+  }
+
+  function updateFilePreview() {
+    filePreview.innerHTML = '';
+    uploadedFiles.forEach(file => displayFilePreview(file));
+  }
+
+  // Drag and drop functionality
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('drag-over');
+  });
+
+  uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('drag-over');
+  });
+
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+  });
+
+  uploadArea.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    handleFiles(e.target.files);
+  });
+
+  // Form event listeners
+  websiteType.addEventListener('change', () => {
+    updateAvailableFeatures();
+  });
+  form.addEventListener('input', calculateCost);
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    
+    // Add selected features to form data
+    selectedFeatures.forEach(feature => {
+      formData.append('features[]', feature);
+    });
+    
+    // Add uploaded files to form data
+    uploadedFiles.forEach((file, index) => {
+      formData.append(`screenshot_${index}`, file);
+    });
+    
+    alert(`Form submitted with ${uploadedFiles.length} screenshot(s) and ${selectedFeatures.size} features! Check your backend to connect submissions.`);
+  });
+
+  // Global function for remove buttons
+  window.removeFile = removeFile;
+
+  // Initialize the form
+  updateAvailableFeatures();
+  calculateCost();
+</script>
+
+<style>
+/* === Base Slide Styles === */
+.slide {
+    width: 90%;
+    max-width: 1280px;
+    margin: 2rem auto;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    background-color: #000;
+    border: 2px solid #00ffff;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* === Headings === */
+.slide h1, .slide h2, .slide h3 {
+    color: #00ffff;
+    margin-bottom: 1rem;
+}
+
+/* === Form === */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+label {
+    font-weight: bold;
+    color: #00ffff;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+textarea,
+select {
+    background-color: #111;
+    color: #fff;
+    border: 1px solid #00ffff;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+}
+
+/* === Features Grid === */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.feature-item {
+    background-color: rgba(0, 255, 255, 0.05);
+    border: 1px solid #00ffff;
+    border-radius: 8px;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-item:hover {
+    background-color: rgba(0, 255, 255, 0.1);
+    border-color: #40ffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.2);
+}
+
+.feature-item.selected {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(110, 0, 255, 0.2));
+    border-color: #80ffff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+.feature-item.selected::before {
+    content: '✓';
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    width: 16px;
+    height: 16px;
+    background-color: #00ffff;
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.feature-emoji {
+    font-size: 1.25rem;
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.feature-name {
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.2rem;
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+.feature-price {
+    color: #00ffff;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.feature-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: rgba(100, 100, 100, 0.1);
+    border-color: #666;
+}
+
+.feature-item.disabled:hover {
+    transform: none;
+    box-shadow: none;
+    background-color: rgba(100, 100, 100, 0.1);
+    border-color: #666;
+}
+
+/* === File Upload Styles === */
+.upload-container {
+    position: relative;
+}
+
+.file-input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.upload-area {
+    border: 2px dashed #00ffff;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    background-color: rgba(0, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.upload-area:hover {
+    background-color: rgba(0, 255, 255, 0.1);
+    border-color: #40ffff;
+}
+
+.upload-area.drag-over {
+    background-color: rgba(0, 255, 255, 0.15);
+    border-color: #80ffff;
+    transform: scale(1.02);
+}
+
+.upload-content {
+    pointer-events: none;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.upload-text {
+    font-size: 1.1rem;
+    color: #00ffff;
+    margin-bottom: 0.5rem;
+}
+
+.upload-subtext {
+    font-size: 0.9rem;
+    color: #80ffff;
+}
+
+/* === File Preview Styles === */
+.file-preview {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.preview-item {
+    background-color: #111;
+    border: 1px solid #00ffff;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.preview-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-info {
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-name {
+    font-size: 0.8rem;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.remove-file {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+}
+
+.remove-file:hover {
+    background-color: #ff6666;
+}
+
+/* === Submit Button === */
+button[type="submit"] {
+    background: linear-gradient(to right, #00ffff, #6e00ff);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    align-self: flex-end;
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(to right, #6e00ff, #00ffff);
+    transform: scale(1.05);
+}
+
+/* === Responsive === */
+@media screen and (max-width: 768px) {
+    .slide {
+        padding: 1rem;
+    }
+    
+    .file-preview {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .upload-area {
+        padding: 1.5rem;
+    }
+    
+    .upload-icon {
+        font-size: 2rem;
+    }
+}
+</style>
+
+</body>
+</html>
