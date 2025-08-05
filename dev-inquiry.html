@@ -3,1051 +3,461 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Design Inquiry Form</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: 
-               transparent,
-                radial-gradient(ellipse at bottom, rgba(0,20,40,0.3) 0%, transparent 70%),
-                linear-gradient(180deg, #000814 0%, #001d3d 50%, #000814 100%);
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 25% 25%, rgba(0,255,255,0.03) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(0,150,255,0.02) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: rgba(5,15,25,0.95);
-            border-radius: 24px;
-            box-shadow: 
-                0 25px 50px rgba(0,0,0,0.5),
-                0 0 0 1px rgba(0,255,255,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.05);
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-        }
-
-        .header {
-            background: linear-gradient(135deg, rgba(0,10,20,0.9) 0%, rgba(0,25,50,0.8) 100%);
-            color: #ffffff;
-            padding: 40px 30px;
-            text-align: center;
-            border-bottom: 1px solid rgba(0,255,255,0.15);
-            position: relative;
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,255,255,0.8), transparent);
-            box-shadow: 0 0 8px rgba(0,255,255,0.4);
-        }
-
-        .header h1 {
-            font-size: 2.4em;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, #ffffff 0%, #00d4ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .header p {
-            color: rgba(255,255,255,0.8);
-            font-size: 1.1em;
-            font-weight: 400;
-        }
-
-        .form-container {
-            padding: 40px;
-            background: rgba(0,10,20,0.6);
-        }
-
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-            gap: 30px;
-        }
-
-        .step {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.8);
-            border: 2px solid rgba(0,255,255,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #666;
-            transition: all 0.4s ease;
-            position: relative;
-            font-family: 'Courier New', monospace;
-        }
-
-        .step::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #00ffff, #0088ff);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
-
-        .step.active {
-            background: rgba(0,255,255,0.2);
-            color: #00ffff;
-            border-color: #00ffff;
-            box-shadow: 
-                0 0 20px rgba(0,255,255,0.5),
-                inset 0 0 20px rgba(0,255,255,0.1);
-            text-shadow: 0 0 10px #00ffff;
-        }
-
-        .step.active::before {
-            opacity: 1;
-        }
-
-        .step.completed {
-            background: rgba(0,255,0,0.2);
-            color: #00ff88;
-            border-color: #00ff88;
-            box-shadow: 0 0 20px rgba(0,255,136,0.4);
-        }
-
-        .form-step {
-            display: none;
-        }
-
-        .form-step.active {
-            display: block !important;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 20px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 0.95em;
-        }
-
-        .required {
-            color: #e74c3c;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="url"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            background: #fff;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border: 1px solid rgba(0,255,255,0.3);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            background: rgba(0,0,0,0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .checkbox-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0,255,255,0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .checkbox-item:hover {
-            border-color: #00ffff;
-            background: rgba(0,255,255,0.1);
-            box-shadow: 0 0 15px rgba(0,255,255,0.3);
-        }
-
-        .checkbox-item:hover::before {
-            left: 100%;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            margin-right: 12px;
-            transform: scale(1.3);
-            accent-color: #00ffff;
-        }
-
-        .checkbox-item span {
-            color: #ffffff;
-            font-weight: 500;
-        }
-
-        .checkbox-item input[type="checkbox"]:checked + span {
-            color: #00ffff;
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(0,255,255,0.6);
-        }
-
-        .budget-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .budget-option {
-            position: relative;
-        }
-
-        .budget-option input[type="radio"] {
-            display: none;
-        }
-
-        .budget-option label {
-            display: block;
-            padding: 15px;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 0;
-        }
-
-        .budget-option input[type="radio"]:checked + label {
-            border-color: #3498db;
-            background: #3498db;
-            color: white;
-        }
-
-        .timeline-options {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .timeline-option {
-            flex: 1;
-            min-width: 120px;
-        }
-
-        .timeline-option input[type="radio"] {
-            display: none;
-        }
-
-        .timeline-option label {
-            display: block;
-            padding: 12px;
-            border: 2px solid #ecf0f1;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 0;
-        }
-
-        .timeline-option input[type="radio"]:checked + label {
-            border-color: #27ae60;
-            background: #27ae60;
-            color: white;
-        }
-
-        .inspiration-upload {
-            border: 2px dashed #bdc3c7;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            color: #7f8c8d;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .inspiration-upload:hover {
-            border-color: #3498db;
-            color: #3498db;
-        }
-
-        .inspiration-upload input[type="file"] {
-            display: none;
-        }
-
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-prev {
-            background: #95a5a6;
-            color: white;
-        }
-
-        .btn-prev:hover {
-            background: #7f8c8d;
-        }
-
-        .btn-next, .btn-submit {
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            color: white;
-        }
-
-        .btn-next:hover, .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
-        }
-
-        .price-estimate {
-            background: linear-gradient(135deg, rgba(0,255,136,0.1) 0%, rgba(0,255,255,0.1) 100%);
-            border: 1px solid rgba(0,255,136,0.4);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .price-estimate::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #00ff88, transparent);
-            box-shadow: 0 0 10px #00ff88;
-        }
-
-        .price-estimate h3 {
-            color: #00ff88;
-            margin-bottom: 15px;
-            text-shadow: 0 0 15px rgba(0,255,136,0.8);
-            font-size: 1.3em;
-            letter-spacing: 1px;
-        }
-
-        .price-range {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #00ffff;
-            text-shadow: 0 0 20px rgba(0,255,255,0.8);
-            font-family: 'Courier New', monospace;
-        }
-
-        .success-message {
-            display: none;
-            background: linear-gradient(135deg, rgba(0,255,136,0.1) 0%, rgba(0,255,255,0.1) 100%);
-            color: #00ff88;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(0,255,136,0.4);
-            box-shadow: 0 0 30px rgba(0,255,136,0.3);
-        }
-
-        .success-message h3 {
-            text-shadow: 0 0 15px rgba(0,255,136,0.8);
-            margin-bottom: 15px;
-        }
-
-        .success-message h4 {
-            color: #00ddff;
-            text-shadow: 0 0 10px rgba(0,221,255,0.6);
-        }
-
-        .form-step h2 {
-            color: #00ffff;
-            margin-bottom: 25px;
-            text-shadow: 0 0 15px rgba(0,255,255,0.6);
-            font-weight: 300;
-            letter-spacing: 2px;
-            text-align: center;
-            position: relative;
-        }
-
-        .form-step h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #00ffff, transparent);
-            box-shadow: 0 0 10px #00ffff;
-        }
-
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            
-            .checkbox-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .budget-options {
-                grid-template-columns: 1fr;
-            }
-            
-            .timeline-options {
-                flex-direction: column;
-            }
-            
-            .container {
-                margin: 10px;
-            }
-            
-            .form-container {
-                padding: 20px;
-            }
-        }
-    </style>
+    <title>Website Project Inquiry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🎨 Website Design Inquiry</h1>
-            <p>Let's bring your vision to life with a custom website</p>
+<body class="bg-gray-900 min-h-screen">
+
+<section class="slide">
+  <div class="overlay">
+    <div class="content">
+      <h1 class="title">🚀 Website Project Inquiry</h1>
+      <p class="subtitle">Let us know what you need — pricing is calculated automatically!</p>
+
+      <form id="inquiryForm" class="w-full max-w-3xl mx-auto text-left text-white space-y-6 mt-8">
+        <!-- Website Type -->
+        <div>
+          <label for="websiteType" class="block font-semibold mb-2">What type of website do you need? *</label>
+          <select id="websiteType" name="websiteType" required
+            class="w-full bg-black bg-opacity-50 border border-cyan-500 rounded-lg p-3 text-white">
+            <option value="">Select website type...</option>
+            <option value="basic">🔹 Basic Site ($300+)</option>
+            <option value="advanced">🔸 Advanced Site ($800+)</option>
+          </select>
         </div>
-        
-        <div class="form-container">
-            <div class="step-indicator">
-                <div class="step active" data-step="1">1</div>
-                <div class="step" data-step="2">2</div>
-                <div class="step" data-step="3">3</div>
-                <div class="step" data-step="4">4</div>
+
+        <!-- Features -->
+        <div>
+          <label class="block font-semibold mb-2">What features do you need? (Select all that apply)</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+            <label><input type="checkbox" name="features" value="100"> 📩 Contact Forms (+$100)</label>
+            <label><input type="checkbox" name="features" value="250"> 🛒 Online Store (+$250)</label>
+            <label><input type="checkbox" name="features" value="300"> 📅 Online Booking (+$300)</label>
+            <label><input type="checkbox" name="features" value="100"> 🖼️ Photo Gallery (+$100)</label>
+            <label><input type="checkbox" name="features" value="200"> 📝 Blog/News (+$200)</label>
+            <label><input type="checkbox" name="features" value="100"> 🌐 Social Media Integration (+$100)</label>
+            <label><input type="checkbox" name="features" value="150"> 💬 Live Chat (+$150)</label>
+            <label><input type="checkbox" name="features" value="500"> 👤 Member Login (+$500)</label>
+            <label><input type="checkbox" name="features" value="75"> 📈 Analytics (+$75)</label>
+          </div>
+        </div>
+
+        <!-- Number of Pages -->
+        <div>
+          <label for="pageCount" class="block font-semibold mb-2">Enter number of pages ($100/page)</label>
+          <input type="number" id="pageCount" name="pageCount" min="1" value="3"
+            class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white">
+        </div>
+
+        <!-- Design Preferences -->
+        <div>
+          <label for="designStyle" class="block font-semibold mb-2">What design style appeals to you?</label>
+          <select id="designStyle" name="designStyle"
+            class="w-full bg-black bg-opacity-40 border border-cyan-500 rounded-lg p-3 text-white">
+            <option value="">Select a style...</option>
+            <option>Minimal & Clean</option>
+            <option>Dark & Futuristic</option>
+            <option>Colorful & Bold</option>
+            <option>Professional & Corporate</option>
+            <option>Other (explain below)</option>
+          </select>
+        </div>
+
+        <!-- Color Preferences -->
+        <div>
+          <label for="colors" class="block font-semibold mb-2">Do you have specific color preferences?</label>
+          <textarea id="colors" name="colors" rows="2"
+            class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white"></textarea>
+        </div>
+
+        <!-- Website Inspirations -->
+        <div>
+          <label for="inspirations" class="block font-semibold mb-2">Websites you like (inspiration)</label>
+          <textarea id="inspirations" name="inspirations" rows="2"
+            class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white"></textarea>
+        </div>
+
+        <!-- Screenshot Upload Section -->
+        <div>
+          <label for="screenshots" class="block font-semibold mb-2">📸 Upload Screenshots (Design inspiration, mockups, etc.)</label>
+          <div class="upload-container">
+            <input type="file" id="screenshots" name="screenshots" multiple accept="image/*"
+              class="file-input">
+            <div class="upload-area" id="uploadArea">
+              <div class="upload-content">
+                <span class="upload-icon">📁</span>
+                <p class="upload-text">Click to upload or drag and drop images here</p>
+                <p class="upload-subtext">PNG, JPG, GIF up to 10MB each</p>
+              </div>
             </div>
-
-            <form id="designForm" action="https://formspree.io/f/<Your-ID>" method="POST">
-                <!-- Hidden fields for FormSpree -->
-                <input type="hidden" name="_subject" value="New Website Design Inquiry">
-                <input type="hidden" name="_next" value="">
-                <input type="hidden" name="_captcha" value="false">
-                
-                <!-- Honeypot field for spam protection -->
-                <input type="text" name="_gotcha" style="display:none;">
-                
-                <!-- Collected data fields (hidden, populated by JS) -->
-                <input type="hidden" name="selected_features" id="selectedFeatures">
-                <input type="hidden" name="form_step_completed" value="4">
-                <input type="hidden" name="price_estimate" id="priceEstimateField">
-                <!-- Step 1: Basic Information -->
-                <div class="form-step active" data-step="1">
-                    <h2>📋 Tell Us About Your Project</h2>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">First Name <span class="required">*</span></label>
-                            <input type="text" id="firstName" name="firstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name <span class="required">*</span></label>
-                            <input type="text" id="lastName" name="lastName" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email">Email Address <span class="required">*</span></label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="company">Business/Organization Name <span class="required">*</span></label>
-                        <input type="text" id="company" name="company" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="currentWebsite">Current Website (if any)</label>
-                        <input type="url" id="currentWebsite" name="currentWebsite" placeholder="https://yourwebsite.com">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="projectDescription">Brief Project Description <span class="required">*</span></label>
-                        <textarea id="projectDescription" name="projectDescription" placeholder="Tell us about your business and what you want to achieve with your new website..." required></textarea>
-                    </div>
-                </div>
-
-                <!-- Step 2: Website Type & Features -->
-                <div class="form-step" data-step="2">
-                    <h2>🏗️ Website Type & Features</h2>
-                    
-                    <div class="form-group">
-                        <label for="websiteType">What type of website do you need? <span class="required">*</span></label>
-                        <select id="websiteType" name="websiteType" required>
-                            <option value="">Select website type...</option>
-                            <option value="business">🏢 Business/Corporate Website</option>
-                            <option value="ecommerce">🛒 E-commerce Store</option>
-                            <option value="portfolio">🎨 Portfolio/Creative Showcase</option>
-                            <option value="blog">📝 Blog/News Website</option>
-                            <option value="nonprofit">🤝 Non-profit Organization</option>
-                            <option value="restaurant">🍽️ Restaurant/Food Service</option>
-                            <option value="medical">🏥 Medical/Healthcare</option>
-                            <option value="real-estate">🏠 Real Estate</option>
-                            <option value="education">🎓 Educational Institution</option>
-                            <option value="other">❓ Other</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>What features do you need? (Select all that apply)</label>
-                        <div class="checkbox-grid">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="contact-form" name="features[]" value="contact-form">
-                                <span>📧 Contact Forms</span>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="online-store" name="features[]" value="online-store">
-                                <span>🛍️ Online Store</span>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="booking" name="features[]" value="booking">
-                                <span>📅 Online Booking</span>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="gallery" name="features[]" value="gallery">
-                                <span>🖼️ Photo Gallery</span>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="blog" name="features[]" value="blog">
-                                <span>📝 Blog/News Section</span>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="social-media" name="features[]" value="social-media">
-                                <span>📱 Social Media Integration</span>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="live-chat" name="features[]" value="live-chat">
-                                <span>💬 Live Chat</span>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="member-login" name="features[]" value="member-login">
-                                <span>👤 Member Login Area</span>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="seo" name="features[]" value="seo">
-                                <span>🔍 SEO Optimization</span>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="analytics" name="features[]" value="analytics">
-                                <span>📊 Analytics Setup</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="pages">Approximately how many pages will your website need? <span class="required">*</span></label>
-                        <select id="pages" name="pages" required>
-                            <option value="">Select page count...</option>
-                            <option value="1-5">1-5 pages (Simple)</option>
-                            <option value="6-10">6-10 pages (Medium)</option>
-                            <option value="11-20">11-20 pages (Large)</option>
-                            <option value="20+">20+ pages (Complex)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Step 3: Design Preferences -->
-                <div class="form-step" data-step="3">
-                    <h2>🎨 Design Preferences</h2>
-                    
-                    <div class="form-group">
-                        <label for="designStyle">What design style appeals to you?</label>
-                        <select id="designStyle" name="designStyle">
-                            <option value="">Select a style...</option>
-                            <option value="modern">✨ Modern & Minimalist</option>
-                            <option value="corporate">💼 Professional & Corporate</option>
-                            <option value="creative">🎨 Creative & Artistic</option>
-                            <option value="fun">🎉 Fun & Playful</option>
-                            <option value="elegant">👑 Elegant & Luxurious</option>
-                            <option value="rustic">🌿 Rustic & Natural</option>
-                            <option value="tech">⚡ Tech & Futuristic</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="colorPrefs">Do you have specific color preferences?</label>
-                        <textarea id="colorPrefs" name="colorPrefs" placeholder="Describe your preferred colors or color schemes..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="inspiration">Websites you like (inspiration)</label>
-                        <textarea id="inspiration" name="inspiration" placeholder="List any websites you admire and what you like about them..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Upload inspiration images, logos, or reference materials</label>
-                        <div class="inspiration-upload">
-                            <input type="file" id="inspirationFiles" name="inspiration[]" multiple accept="image/*,.pdf">
-                            <label for="inspirationFiles">
-                                📎 Click to upload files<br>
-                                <small>Images, PDFs, logos, color palettes, etc.</small>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="contentReady">Do you have content ready (text, images, etc.)?</label>
-                        <select id="contentReady" name="contentReady">
-                            <option value="yes">✅ Yes, I have everything ready</option>
-                            <option value="partial">⚠️ I have some content</option>
-                            <option value="no">❌ No, I need help creating content</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Step 4: Budget & Timeline -->
-                <div class="form-step" data-step="4">
-                    <h2>💰 Budget & Timeline</h2>
-                    
-                    <div class="form-group">
-                        <label>What's your budget range for this project? <span class="required">*</span></label>
-                        <div class="budget-options">
-                            <div class="budget-option">
-                                <input type="radio" id="budget1" name="budget" value="under-1000" required>
-                                <label for="budget1">Under $1,000</label>
-                            </div>
-                            <div class="budget-option">
-                                <input type="radio" id="budget2" name="budget" value="1000-2500" required>
-                                <label for="budget2">$1,000 - $2,500</label>
-                            </div>
-                            <div class="budget-option">
-                                <input type="radio" id="budget3" name="budget" value="2500-5000" required>
-                                <label for="budget3">$2,500 - $5,000</label>
-                            </div>
-                            <div class="budget-option">
-                                <input type="radio" id="budget4" name="budget" value="5000-10000" required>
-                                <label for="budget4">$5,000 - $10,000</label>
-                            </div>
-                            <div class="budget-option">
-                                <input type="radio" id="budget5" name="budget" value="over-10000" required>
-                                <label for="budget5">$10,000+</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>When do you need the website completed? <span class="required">*</span></label>
-                        <div class="timeline-options">
-                            <div class="timeline-option">
-                                <input type="radio" id="timeline1" name="timeline" value="asap" required>
-                                <label for="timeline1">🚀 ASAP</label>
-                            </div>
-                            <div class="timeline-option">
-                                <input type="radio" id="timeline2" name="timeline" value="1-month" required>
-                                <label for="timeline2">📅 1 Month</label>
-                            </div>
-                            <div class="timeline-option">
-                                <input type="radio" id="timeline3" name="timeline" value="2-3-months" required>
-                                <label for="timeline3">⏰ 2-3 Months</label>
-                            </div>
-                            <div class="timeline-option">
-                                <input type="radio" id="timeline4" name="timeline" value="flexible" required>
-                                <label for="timeline4">🤝 Flexible</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="additionalInfo">Anything else we should know?</label>
-                        <textarea id="additionalInfo" name="additionalInfo" placeholder="Special requirements, questions, concerns, or additional details..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Hosting & Maintenance Plan</label>
-                        <div class="budget-options">
-                            <div class="budget-option">
-                                <input type="radio" id="hosting1" name="hosting" value="basic" required>
-                                <label for="hosting1">Basic ($25/mo)</label>
-                            </div>
-                            <div class="budget-option">
-                                <input type="radio" id="hosting2" name="hosting" value="business" required>
-                                <label for="hosting2">Business ($50/mo)</label>
-                            </div>
-                            <div class="budget-option">
-                                <input type="radio" id="hosting3" name="hosting" value="managed" required>
-                                <label for="hosting3">Managed ($100/mo)</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="priceEstimate" class="price-estimate" style="display: none;">
-                        <h3>💡 Estimated Project Range</h3>
-                        <div class="price-range" id="priceRange"></div>
-                        <div class="price-range" id="hostingPrice" style="font-size: 1.2em; margin-top: 10px;"></div>
-                        <p><small>This is a rough estimate. Final pricing will depend on specific requirements discussed in consultation.</small></p>
-                    </div>
-                </div>
-
-                <div class="nav-buttons">
-                    <button type="button" class="btn btn-prev" id="prevBtn" style="display: none;">← Previous</button>
-                    <button type="button" class="btn btn-next" id="nextBtn">Next →</button>
-                    <button type="submit" class="btn btn-submit" id="submitBtn" style="display: none;">🚀 Submit Inquiry</button>
-                </div>
-
-                <div id="successMessage" class="success-message">
-                    <h3>✅ Inquiry Submitted Successfully!</h3>
-                    <p>Thank you for your interest! We'll review your project details and get back to you within 24 hours with a detailed proposal.</p>
-                    
-                    <div style="margin-top: 20px; text-align: left;">
-                        <h4 style="color: #2c3e50; margin-bottom: 15px;">🚀 What Happens Next:</h4>
-                        <div style="display: flex; flex-direction: column; gap: 12px;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="background: #3498db; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">1</span>
-                                <span><strong>Within 2 Hours:</strong> You'll receive a confirmation email with your inquiry reference number</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="background: #3498db; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">2</span>
-                                <span><strong>Within 24 Hours:</strong> Our team will review your requirements and prepare a detailed proposal</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="background: #3498db; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">3</span>
-                                <span><strong>Within 48 Hours:</strong> We'll schedule a free 30-minute consultation call to discuss your vision</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="background: #27ae60; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">4</span>
-                                <span><strong>After Consultation:</strong> You'll receive a custom proposal with timeline, pricing, and project roadmap</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #3498db;">
-                        <h4 style="color: #2c3e50; margin-bottom: 10px;">📋 What to Prepare for Our Call:</h4>
-                        <ul style="margin: 0; padding-left: 20px; color: #34495e;">
-                            <li>Any additional reference websites or design ideas</li>
-                            <li>Your brand guidelines, logos, or existing marketing materials</li>
-                            <li>List of specific functionalities you'd like to discuss</li>
-                            <li>Questions about our process, hosting, or ongoing support</li>
-                        </ul>
-                    </div>
-                    
-                    <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 8px; text-align: center;">
-                        <p style="margin: 0; color: #27ae60; font-weight: 600;">🎯 Our Goal: Create a website that drives real results for your business</p>
-                    </div>
-                    
-                    <div style="margin-top: 20px; text-align: center;">
-                        <p style="margin-bottom: 10px; color: #7f8c8d;">Questions in the meantime?</p>
-                        <p style="margin: 0;"><strong>📞 (555) 123-4567</strong> | <strong>📧 hello@yourcompany.com</strong></p>
-                    </div>
-                </div>
-            </form>
+          </div>
+          <div id="filePreview" class="file-preview"></div>
         </div>
+
+        <!-- Project Description -->
+        <div>
+          <label for="projectDesc" class="block font-semibold mb-2">Project description (special requests, ideas, etc.)</label>
+          <textarea id="projectDesc" name="projectDesc" rows="4"
+            class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white"></textarea>
+        </div>
+
+        <!-- Cost Output -->
+        <div class="pt-6 border-t border-cyan-500">
+          <p class="font-bold text-xl">💰 Estimated Cost: <span id="totalCost" class="text-cyan-400">$0</span></p>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center pt-6">
+          <button type="submit"
+            class="bg-cyan-500 text-black font-bold py-3 px-8 rounded-full hover:bg-cyan-400 transition-all duration-300 shadow-lg shadow-cyan-500/30">
+            Submit Inquiry
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
+</section>
 
-    <script>
-        let currentStep = 1;
-        const totalSteps = 4;
+<script>
+  const form = document.getElementById('inquiryForm');
+  const costDisplay = document.getElementById('totalCost');
+  const features = form.querySelectorAll("input[name='features']");
+  const pages = document.getElementById('pageCount');
+  const websiteType = document.getElementById('websiteType');
+  const fileInput = document.getElementById('screenshots');
+  const uploadArea = document.getElementById('uploadArea');
+  const filePreview = document.getElementById('filePreview');
 
-        // Navigation
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            if (validateStep(currentStep)) {
-                if (currentStep < totalSteps) {
-                    currentStep++;
-                    showStep(currentStep);
-                }
-            }
-        });
+  let uploadedFiles = [];
 
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        });
+  function calculateCost() {
+    let cost = 0;
+    const base = websiteType.value === 'basic' ? 300 : websiteType.value === 'advanced' ? 800 : 0;
+    cost += base;
 
-        function showStep(step) {
-            // Hide all steps
-            document.querySelectorAll('.form-step').forEach(s => {
-                s.classList.remove('active');
-                s.style.display = 'none';
-            });
-            document.querySelectorAll('.step').forEach(s => s.classList.remove('active', 'completed'));
-            
-            // Show current step
-            const currentFormStep = document.querySelector(`.form-step[data-step="${step}"]`);
-            const currentStepIndicator = document.querySelector(`.step[data-step="${step}"]`);
-            
-            if (currentFormStep) {
-                currentFormStep.classList.add('active');
-                currentFormStep.style.display = 'block';
-            }
-            
-            if (currentStepIndicator) {
-                currentStepIndicator.classList.add('active');
-            }
-            
-            // Mark completed steps
-            for (let i = 1; i < step; i++) {
-                const completedStep = document.querySelector(`.step[data-step="${i}"]`);
-                if (completedStep) {
-                    completedStep.classList.add('completed');
-                }
-            }
-            
-            // Update navigation buttons
-            document.getElementById('prevBtn').style.display = step > 1 ? 'block' : 'none';
-            document.getElementById('nextBtn').style.display = step < totalSteps ? 'block' : 'none';
-            document.getElementById('submitBtn').style.display = step === totalSteps ? 'block' : 'none';
-            
-            // Show price estimate on last step
-            if (step === totalSteps) {
-                updatePriceEstimate();
-            }
-        }
+    features.forEach(feature => {
+      if (feature.checked) {
+        cost += parseInt(feature.value);
+      }
+    });
 
-        function validateStep(step) {
-            const currentStepEl = document.querySelector(`[data-step="${step}"]`);
-            const requiredFields = currentStepEl.querySelectorAll('[required]');
-            let isValid = true;
-            
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.style.borderColor = '#e74c3c';
-                    isValid = false;
-                } else {
-                    field.style.borderColor = '#27ae60';
-                }
-            });
-            
-            return isValid;
-        }
+    const pageCost = parseInt(pages.value || 0) * 100;
+    cost += pageCost;
 
-        function updatePriceEstimate() {
-            const websiteType = document.getElementById('websiteType').value;
-            const pages = document.getElementById('pages').value;
-            const features = Array.from(document.querySelectorAll('input[name="features[]"]:checked')).map(f => f.value);
-            const hosting = document.querySelector('input[name="hosting"]:checked')?.value;
-            const contentReady = document.getElementById('contentReady').value;
+    costDisplay.textContent = `$${cost.toLocaleString()}`;
+  }
 
-            // New pricing logic
-            let basePrice = 600;
+  // File upload functionality
+  function handleFiles(files) {
+    Array.from(files).forEach(file => {
+      if (file.type.startsWith('image/') && file.size <= 10 * 1024 * 1024) {
+        uploadedFiles.push(file);
+        displayFilePreview(file);
+      } else {
+        alert(`File "${file.name}" is either not an image or exceeds 10MB limit.`);
+      }
+    });
+  }
 
-            // Website type multiplier
-            const typeMultipliers = {
-                'business': 1.2, 'ecommerce': 2.5, 'portfolio': 1.0, 'blog': 0.9,
-                'nonprofit': 0.9, 'restaurant': 1.4, 'medical': 1.6, 'real-estate': 1.5,
-                'education': 1.1, 'other': 1.0
-            };
-            basePrice *= typeMultipliers[websiteType] || 1.0;
+  function displayFilePreview(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const previewItem = document.createElement('div');
+      previewItem.className = 'preview-item';
+      previewItem.innerHTML = `
+        <img src="${e.target.result}" alt="${file.name}" class="preview-image">
+        <div class="preview-info">
+          <span class="file-name">${file.name}</span>
+          <button type="button" class="remove-file" onclick="removeFile('${file.name}')">×</button>
+        </div>
+      `;
+      filePreview.appendChild(previewItem);
+    };
+    reader.readAsDataURL(file);
+  }
 
-            // Page count multiplier
-            const pageMultipliers = {
-                '1-5': 1.0, '6-10': 1.5, '11-20': 2.2, '20+': 3.5
-            };
-            basePrice *= pageMultipliers[pages] || 1.0;
+  function removeFile(fileName) {
+    uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+    updateFilePreview();
+  }
 
-            // Tiered feature additions
-            const featureCosts = {
-                'contact-form': 75, 'online-store': 500, 'booking': 350, 'gallery': 100,
-                'blog': 150, 'social-media': 50, 'live-chat': 200, 'member-login': 400,
-                'seo': 250, 'analytics': 100
-            };
-            features.forEach(feature => {
-                basePrice += featureCosts[feature] || 0;
-            });
+  function updateFilePreview() {
+    filePreview.innerHTML = '';
+    uploadedFiles.forEach(file => displayFilePreview(file));
+  }
 
-            // Content assistance
-            if (contentReady === 'no') {
-                basePrice += 300;
-            }
+  // Drag and drop functionality
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('drag-over');
+  });
 
-            const minPrice = Math.round(basePrice);
-            const maxPrice = Math.round(basePrice * 1.4);
+  uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('drag-over');
+  });
 
-            document.getElementById('priceRange').textContent = `One-Time Cost: $${minPrice.toLocaleString()} - $${maxPrice.toLocaleString()}`;
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+  });
 
-            // Hosting cost
-            const hostingCosts = {
-                'basic': 25, 'business': 50, 'managed': 100
-            };
-            const hostingCost = hostingCosts[hosting] || 0;
-            if (hostingCost > 0) {
-                document.getElementById('hostingPrice').textContent = `Recurring Cost: $${hostingCost}/month`;
-            } else {
-                document.getElementById('hostingPrice').textContent = '';
-            }
+  uploadArea.addEventListener('click', () => {
+    fileInput.click();
+  });
 
-            document.getElementById('priceEstimate').style.display = 'block';
-        }
+  fileInput.addEventListener('change', (e) => {
+    handleFiles(e.target.files);
+  });
 
-        // Form submission
-        // Update price estimate on change
-        const priceInputs = ['websiteType', 'pages', 'contentReady'];
-        priceInputs.forEach(id => {
-            document.getElementById(id).addEventListener('change', updatePriceEstimate);
-        });
-        document.querySelectorAll('input[name="features[]"], input[name="hosting"]').forEach(input => {
-            input.addEventListener('change', updatePriceEstimate);
-        });
+  // Form event listeners
+  form.addEventListener('change', calculateCost);
+  form.addEventListener('input', calculateCost);
 
-        // Form submission
-        document.getElementById('designForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (!validateStep(4)) {
-                return;
-            }
-            
-            // Collect selected features
-            const features = Array.from(document.querySelectorAll('input[name="features[]"]:checked'))
-                .map(cb => cb.value)
-                .join(', ');
-            
-            // Update hidden fields with collected data
-            document.getElementById('selectedFeatures').value = features;
-            document.getElementById('priceEstimateField').value = document.getElementById('priceRange').textContent;
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.innerHTML;
-            
-            submitBtn.innerHTML = '⏳ Submitting...';
-            submitBtn.disabled = true;
-            
-            // Create FormData and submit to FormSpree
-            const formData = new FormData(this);
-            
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Success
-                    const formContainer = document.querySelector('.form-container');
-                    formContainer.innerHTML = `
-                        <div class="success-message" style="display: block;">
-                            <h3>Your inquiry has been submitted</h3>
-                            <p>Thank you for your interest! We'll review your project details and get back to you within 24 hours with a detailed proposal.</p>
-                        </div>
-                    `;
-                } else {
-                    // Error from FormSpree
-                    return response.json().then(data => {
-                        throw new Error(data.error || 'Something went wrong');
-                    });
-                }
-            })
-            .catch(error => {
-                // Handle errors
-                console.error('Error:', error);
-                alert('There was an error submitting your inquiry. Please try again or contact us directly.');
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            });
-        });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    
+    // Add uploaded files to form data
+    uploadedFiles.forEach((file, index) => {
+      formData.append(`screenshot_${index}`, file);
+    });
+    
+    alert(`Form submitted with ${uploadedFiles.length} screenshot(s)! Check your backend to connect submissions.`);
+  });
 
-        // Enhanced file handling
-        document.getElementById('inspirationFiles').addEventListener('change', function(e) {
-            const files = Array.from(e.target.files);
-            const label = document.querySelector('.inspiration-upload label');
-            
-            if (files.length > 0) {
-                label.innerHTML = `📎 ${files.length} file(s) selected<br><small>Click to change files</small>`;
-            }
-        });
-    </script>
+  // Global function for remove buttons
+  window.removeFile = removeFile;
+
+  calculateCost();
+</script>
+
+<style>
+/* === Base Slide Styles === */
+.slide {
+    width: 90%;
+    max-width: 1280px;
+    margin: 2rem auto;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    background-color: #000;
+    border: 2px solid #00ffff;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* === Headings === */
+.slide h1, .slide h2, .slide h3 {
+    color: #00ffff;
+    margin-bottom: 1rem;
+}
+
+/* === Form === */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+label {
+    font-weight: bold;
+    color: #00ffff;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+textarea,
+select {
+    background-color: #111;
+    color: #fff;
+    border: 1px solid #00ffff;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+}
+
+/* === Checkboxes & Radios === */
+input[type="checkbox"],
+input[type="radio"] {
+    accent-color: #00ffff;
+    transform: scale(1.2);
+    margin-right: 0.5rem;
+}
+
+/* === File Upload Styles === */
+.upload-container {
+    position: relative;
+}
+
+.file-input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.upload-area {
+    border: 2px dashed #00ffff;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    background-color: rgba(0, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.upload-area:hover {
+    background-color: rgba(0, 255, 255, 0.1);
+    border-color: #40ffff;
+}
+
+.upload-area.drag-over {
+    background-color: rgba(0, 255, 255, 0.15);
+    border-color: #80ffff;
+    transform: scale(1.02);
+}
+
+.upload-content {
+    pointer-events: none;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.upload-text {
+    font-size: 1.1rem;
+    color: #00ffff;
+    margin-bottom: 0.5rem;
+}
+
+.upload-subtext {
+    font-size: 0.9rem;
+    color: #80ffff;
+}
+
+/* === File Preview Styles === */
+.file-preview {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.preview-item {
+    background-color: #111;
+    border: 1px solid #00ffff;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.preview-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-info {
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-name {
+    font-size: 0.8rem;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.remove-file {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+}
+
+.remove-file:hover {
+    background-color: #ff6666;
+}
+
+/* === Cost Display === */
+#total-cost {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00ffff;
+    margin-top: 1rem;
+    text-align: right;
+}
+
+/* === Submit Button === */
+button[type="submit"] {
+    background: linear-gradient(to right, #00ffff, #6e00ff);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    align-self: flex-end;
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(to right, #6e00ff, #00ffff);
+    transform: scale(1.05);
+}
+
+/* === Responsive === */
+@media screen and (max-width: 768px) {
+    .slide {
+        padding: 1rem;
+    }
+    
+    .file-preview {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .upload-area {
+        padding: 1.5rem;
+    }
+    
+    .upload-icon {
+        font-size: 2rem;
+    }
+}
+</style>
+
 </body>
 </html>
