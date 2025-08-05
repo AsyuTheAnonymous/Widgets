@@ -11,18 +11,18 @@
 <section class="slide">
   <div class="overlay">
     <div class="content">
-      <h1 class="title">🚀 Website Project Inquiry</h1>
-      <p class="subtitle">Let us know what you need — pricing is calculated automatically!</p>
+      <h1 class="title text-center">🚀 Website Project Inquiry</h1>
+      <p class="subtitle text-center">Let us know what you need — pricing is calculated automatically!</p>
 
-      <form id="inquiryForm" class="w-full max-w-3xl mx-auto text-left text-white space-y-6 mt-8">
+      <form id="inquiryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" class="w-full max-w-3xl mx-auto text-left text-white space-y-6 mt-8">
         <!-- Website Type -->
         <div>
           <label for="websiteType" class="block font-semibold mb-2">What type of website do you need? *</label>
-          <select id="websiteType" name="websiteType" required
+          <select id="websiteType" name="Website Plan" required
             class="w-full bg-black bg-opacity-50 border border-cyan-500 rounded-lg p-3 text-white">
             <option value="">Select website plan...</option>
-            <option value="basic">🔹 Basic Plan</option>
-            <option value="advanced">🔸 Advanced Plan (+$300)</option>
+            <option value="Basic Plan">🔹 Basic Plan</option>
+            <option value="Advanced Plan (+$300)">🔸 Advanced Plan (+$300)</option>
           </select>
         </div>
 
@@ -106,14 +106,14 @@
         <!-- Number of Pages -->
         <div>
           <label for="pageCount" class="block font-semibold mb-2">Enter number of pages ($100/page)</label>
-          <input type="number" id="pageCount" name="pageCount" min="1" value="3"
+          <input type="number" id="pageCount" name="Number of Pages" min="1" value="3"
             class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white">
         </div>
 
         <!-- Design Preferences -->
         <div>
           <label for="designStyle" class="block font-semibold mb-2">What design style appeals to you?</label>
-          <select id="designStyle" name="designStyle"
+          <select id="designStyle" name="Design Style"
             class="w-full bg-black bg-opacity-40 border border-cyan-500 rounded-lg p-3 text-white">
             <option value="">Select a style...</option>
             <option>Minimal & Clean</option>
@@ -127,14 +127,14 @@
         <!-- Color Preferences -->
         <div>
           <label for="colors" class="block font-semibold mb-2">Do you have specific color preferences?</label>
-          <textarea id="colors" name="colors" rows="2"
+          <textarea id="colors" name="Color Preferences" rows="2"
             class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white"></textarea>
         </div>
 
         <!-- Website Inspirations -->
         <div>
           <label for="inspirations" class="block font-semibold mb-2">Websites you like (inspiration)</label>
-          <textarea id="inspirations" name="inspirations" rows="2"
+          <textarea id="inspirations" name="Website Inspirations" rows="2"
             class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white"></textarea>
         </div>
 
@@ -158,9 +158,13 @@
         <!-- Project Description -->
         <div>
           <label for="projectDesc" class="block font-semibold mb-2">Project description (special requests, ideas, etc.)</label>
-          <textarea id="projectDesc" name="projectDesc" rows="4"
+          <textarea id="projectDesc" name="Project Description" rows="4"
             class="w-full bg-transparent border border-cyan-500 rounded-lg p-3 text-white"></textarea>
         </div>
+
+        <!-- Hidden fields for selected features and cost -->
+        <input type="hidden" name="Selected Features" id="selectedFeaturesInput">
+        <input type="hidden" name="Total Estimated Cost" id="totalCostInput">
 
         <!-- Cost Output -->
         <div class="pt-6 border-t border-cyan-500">
@@ -194,7 +198,7 @@
 
   function calculateCost() {
     let cost = 0;
-    const base = websiteType.value === 'basic' ? 0 : websiteType.value === 'advanced' ? 300 : 0;
+    const base = websiteType.value === 'Basic Plan' ? 0 : websiteType.value === 'Advanced Plan (+$300)' ? 300 : 0;
     cost += base;
 
     selectedFeatures.forEach(featureValue => {
@@ -204,7 +208,11 @@
     const pageCost = parseInt(pages.value || 0) * 100;
     cost += pageCost;
 
-    costDisplay.textContent = `$${cost.toLocaleString()}`;
+    const totalCost = `${cost.toLocaleString()}`;
+    costDisplay.textContent = totalCost;
+    
+    // Update hidden field for form submission
+    document.getElementById('totalCostInput').value = totalCost;
   }
 
   // Feature selection functionality
@@ -225,7 +233,7 @@
           selectedFeatures.delete(value);
           item.classList.remove('selected');
         }
-      } else if (selectedPlan === 'basic') {
+      } else if (selectedPlan === 'Basic Plan') {
         if (basicPlanFeatures.includes(featureName)) {
           item.style.display = 'flex';
           item.classList.remove('disabled');
@@ -238,13 +246,26 @@
             item.classList.remove('selected');
           }
         }
-      } else if (selectedPlan === 'advanced') {
+      } else if (selectedPlan === 'Advanced Plan (+$300)') {
         item.style.display = 'flex';
         item.classList.remove('disabled');
       }
     });
     
+    updateSelectedFeaturesInput();
     calculateCost();
+  }
+
+  function updateSelectedFeaturesInput() {
+    const featureNames = [];
+    featureItems.forEach(item => {
+      if (selectedFeatures.has(item.dataset.value)) {
+        const featureName = item.querySelector('.feature-name').textContent;
+        const featurePrice = item.querySelector('.feature-price').textContent;
+        featureNames.push(`${featureName} (${featurePrice})`);
+      }
+    });
+    document.getElementById('selectedFeaturesInput').value = featureNames.join(', ') || 'None selected';
   }
 
   featureItems.forEach(item => {
@@ -264,6 +285,7 @@
         item.classList.add('selected');
       }
       
+      updateSelectedFeaturesInput();
       calculateCost();
     });
   });
@@ -339,19 +361,46 @@
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    
+    // Show loading state
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+    
+    // Create FormData and submit to Formspree
     const formData = new FormData(form);
     
-    // Add selected features to form data
-    selectedFeatures.forEach(feature => {
-      formData.append('features[]', feature);
+    fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) {
+        alert('Thank you! Your inquiry has been sent successfully. We\'ll get back to you soon!');
+        form.reset();
+        selectedFeatures.clear();
+        uploadedFiles = [];
+        updateFilePreview();
+        updateAvailableFeatures();
+      } else {
+        response.json().then(data => {
+          if (Object.hasOwnProperty.call(data, 'errors')) {
+            alert('Oops! There was a problem submitting your form: ' + data.errors.map(error => error.message).join(', '));
+          } else {
+            alert('Oops! There was a problem submitting your form.');
+          }
+        });
+      }
+    }).catch(error => {
+      alert('Oops! There was a problem submitting your form. Please try again.');
+    }).finally(() => {
+      // Reset button state
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
     });
-    
-    // Add uploaded files to form data
-    uploadedFiles.forEach((file, index) => {
-      formData.append(`screenshot_${index}`, file);
-    });
-    
-    alert(`Form submitted with ${uploadedFiles.length} screenshot(s) and ${selectedFeatures.size} features! Check your backend to connect submissions.`);
   });
 
   // Global function for remove buttons
