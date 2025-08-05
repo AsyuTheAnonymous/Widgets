@@ -24,6 +24,32 @@
             <option value="Basic Plan">🔹 Basic Plan</option>
             <option value="Advanced Plan (+$300)">🔸 Advanced Plan (+$300)</option>
           </select>
+          
+          <!-- Plan Explanation -->
+          <div id="planExplanation" class="mt-3 p-3 rounded-lg border border-cyan-500 bg-black bg-opacity-30" style="display: none;">
+            <div id="basicPlanInfo" style="display: none;">
+              <h4 class="text-cyan-400 font-semibold mb-2">📱 Basic Plan - Drag & Drop Builder</h4>
+              <p class="text-sm text-gray-300 mb-2">I'll build your website using Hostinger's drag-and-drop builder:</p>
+              <ul class="text-xs text-gray-400 space-y-1 ml-4">
+                <li>• Fast loading and mobile-responsive design</li>
+                <li>• Perfect for small businesses and portfolios</li>
+                <li>• Clean, professional appearance</li>
+                <li>• Cost-effective solution for standard websites</li>
+              </ul>
+            </div>
+            
+            <div id="advancedPlanInfo" style="display: none;">
+              <h4 class="text-cyan-400 font-semibold mb-2">⚡ Advanced Plan - WordPress Platform</h4>
+              <p class="text-sm text-gray-300 mb-2">Built on WordPress for maximum flexibility and power:</p>
+              <ul class="text-xs text-gray-400 space-y-1 ml-4">
+                <li>• Unlimited customization possibilities</li>
+                <li>• Thousands of plugins and integrations</li>
+                <li>• Perfect for complex business needs</li>
+                <li>• SEO-optimized and highly scalable</li>
+                <li>• Industry-standard CMS used by 40% of websites</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         <!-- Features -->
@@ -218,9 +244,27 @@
   // Feature selection functionality
   function updateAvailableFeatures() {
     const selectedPlan = websiteType.value;
+    const planExplanation = document.getElementById('planExplanation');
+    const basicPlanInfo = document.getElementById('basicPlanInfo');
+    const advancedPlanInfo = document.getElementById('advancedPlanInfo');
     
     // Define which features are available for each plan
     const basicPlanFeatures = ['contact', 'booking', 'gallery', 'blog', 'social', 'livechat', 'analytics', 'newsletter', 'multilang', 'customforms', 'backup'];
+    
+    // Show/hide plan explanations
+    if (selectedPlan === 'Basic Plan') {
+      planExplanation.style.display = 'block';
+      basicPlanInfo.style.display = 'block';
+      advancedPlanInfo.style.display = 'none';
+    } else if (selectedPlan === 'Advanced Plan (+$300)') {
+      planExplanation.style.display = 'block';
+      basicPlanInfo.style.display = 'none';
+      advancedPlanInfo.style.display = 'block';
+    } else {
+      planExplanation.style.display = 'none';
+      basicPlanInfo.style.display = 'none';
+      advancedPlanInfo.style.display = 'none';
+    }
     
     featureItems.forEach(item => {
       const featureName = item.dataset.name;
