@@ -1,0 +1,188 @@
+<!--
+  Silvea · FAQ Accordion
+  Prefix: sfq-   ·   Paste into a Hostinger "Embed code" block.
+  Content only: add the section heading above it with Hostinger's own text element.
+  Keep the JSON-LD answers in sync with the visible answers below.
+-->
+<style>
+  @property --sfq-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+  .sfq-wrap {
+    --sfq-cyan: #00f0ff;
+    --sfq-purple: #a855f7;
+    --sfq-text: #e8f6ff;
+    --sfq-muted: #9fb3c8;
+    --sfq-glass: rgba(255, 255, 255, 0.04);
+    --sfq-line: rgba(0, 240, 255, 0.18);
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    color: var(--sfq-text);
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 8px 16px;
+    box-sizing: border-box;
+  }
+  .sfq-wrap *, .sfq-wrap *::before, .sfq-wrap *::after { box-sizing: border-box; }
+
+  .sfq-list { display: grid; gap: 14px; }
+
+  .sfq-item {
+    position: relative;
+    border-radius: 16px;
+    background: var(--sfq-glass);
+    border: 1px solid var(--sfq-line);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .sfq-item:hover { border-color: rgba(0, 240, 255, 0.45); }
+
+  /* Rotating conic border on the open item */
+  .sfq-item[open]::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(from var(--sfq-angle), var(--sfq-cyan), var(--sfq-purple), transparent 40%, var(--sfq-cyan));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: sfq-spin 4s linear infinite;
+    pointer-events: none;
+  }
+  .sfq-item[open] { border-color: transparent; box-shadow: 0 0 28px rgba(0, 240, 255, 0.12); }
+
+  .sfq-q {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.4;
+    border-radius: 16px;
+  }
+  .sfq-q::-webkit-details-marker { display: none; }
+  .sfq-q:focus-visible { outline: 2px solid var(--sfq-cyan); outline-offset: 3px; }
+
+  .sfq-icon {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--sfq-line);
+    position: relative;
+    transition: transform .35s ease, background .35s ease;
+  }
+  .sfq-icon::before, .sfq-icon::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 2px;
+    background: var(--sfq-cyan);
+    border-radius: 2px;
+    transform: translate(-50%, -50%);
+  }
+  .sfq-icon::after { transform: translate(-50%, -50%) rotate(90deg); transition: opacity .3s ease; }
+  .sfq-item[open] .sfq-icon { transform: rotate(180deg); background: rgba(0, 240, 255, 0.12); }
+  .sfq-item[open] .sfq-icon::after { opacity: 0; }
+
+  .sfq-a {
+    padding: 0 22px 20px;
+    color: var(--sfq-muted);
+    line-height: 1.65;
+    font-size: 0.97rem;
+    max-width: 68ch;
+  }
+  .sfq-a p { margin: 0 0 10px; }
+  .sfq-a p:last-child { margin-bottom: 0; }
+  .sfq-a strong { color: var(--sfq-text); }
+  .sfq-a a { color: var(--sfq-cyan); text-underline-offset: 3px; }
+
+  .sfq-item[open] .sfq-a { animation: sfq-reveal .35s ease; }
+
+  @keyframes sfq-spin { to { --sfq-angle: 360deg; } }
+  @keyframes sfq-reveal { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 480px) {
+    .sfq-q { padding: 16px 16px; font-size: 1rem; }
+    .sfq-a { padding: 0 16px 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sfq-item[open]::before, .sfq-item[open] .sfq-a { animation: none; }
+    .sfq-icon, .sfq-item { transition: none; }
+  }
+</style>
+
+<div class="sfq-wrap">
+  <div class="sfq-list">
+    <details class="sfq-item" open>
+      <summary class="sfq-q">What's the difference between the Basic and Advanced website plans?<span class="sfq-icon" aria-hidden="true"></span></summary>
+      <div class="sfq-a">
+        <p><strong>Basic</strong> sites are built on Hostinger's drag-and-drop builder. They load fast, work on every phone, and suit small businesses and portfolios.</p>
+        <p><strong>Advanced</strong> sites (+$300) run on WordPress, which opens up online stores, member logins, and thousands of plugins for businesses with bigger needs.</p>
+      </div>
+    </details>
+
+    <details class="sfq-item">
+      <summary class="sfq-q">Do I need a website to get business email?<span class="sfq-icon" aria-hidden="true"></span></summary>
+      <div class="sfq-a">
+        <p>No. Custom email only needs a domain. We register the domain (or use one you already own), set up your mailboxes, and connect them to your phone and computer. You can add a website later.</p>
+      </div>
+    </details>
+
+    <details class="sfq-item">
+      <summary class="sfq-q">How is website pricing calculated?<span class="sfq-icon" aria-hidden="true"></span></summary>
+      <div class="sfq-a">
+        <p>Your quote is your plan, plus $100 for each page, plus any features you add, such as contact forms, online booking, or a photo gallery. The inquiry form shows the total as you pick options, so there are no surprises.</p>
+      </div>
+    </details>
+
+    <details class="sfq-item">
+      <summary class="sfq-q">What does managed VPS hosting include?<span class="sfq-icon" aria-hidden="true"></span></summary>
+      <div class="sfq-a">
+        <p>We handle the technical setup so you don't have to. You get a server that's configured and ready, plus the login details to start using it right away.</p>
+      </div>
+    </details>
+
+    <details class="sfq-item">
+      <summary class="sfq-q">Can you move my existing website?<span class="sfq-icon" aria-hidden="true"></span></summary>
+      <div class="sfq-a">
+        <p>Yes. We migrate existing WordPress sites, including content, media, and settings. Your current site stays live until the new one is ready to switch over.</p>
+      </div>
+    </details>
+
+    <details class="sfq-item">
+      <summary class="sfq-q">What happens after I send an inquiry?<span class="sfq-icon" aria-hidden="true"></span></summary>
+      <div class="sfq-a">
+        <p>You'll get a proposal with scope, price, and timeline. Once you approve it, we build a live preview you can check on your own phone, make revisions with you, and launch when you're happy. <a href="https://silvea.tech/contact" target="_top">Start with a quick message</a>.</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What's the difference between the Basic and Advanced website plans?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Basic sites are built on Hostinger's drag-and-drop builder: fast, mobile-friendly, and suited to small businesses and portfolios. Advanced sites (+$300) run on WordPress for online stores, member logins, and plugins." } },
+    { "@type": "Question", "name": "Do I need a website to get business email?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Custom email only needs a domain. We register the domain or use one you own, set up your mailboxes, and connect them to your devices." } },
+    { "@type": "Question", "name": "How is website pricing calculated?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Your quote is your plan, plus $100 for each page, plus any features you add such as contact forms, online booking, or a photo gallery." } },
+    { "@type": "Question", "name": "What does managed VPS hosting include?",
+      "acceptedAnswer": { "@type": "Answer", "text": "We handle the technical setup. You get a configured server and the login details to start using it right away." } },
+    { "@type": "Question", "name": "Can you move my existing website?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. We migrate existing WordPress sites, including content, media, and settings, and your current site stays live until the switch." } },
+    { "@type": "Question", "name": "What happens after I send an inquiry?",
+      "acceptedAnswer": { "@type": "Answer", "text": "You get a proposal with scope, price, and timeline. After approval we build a live preview, make revisions with you, and launch." } }
+  ]
+}
+</script>

@@ -1,0 +1,322 @@
+<!--
+  Silvea · Plan Finder Quiz
+  Prefix: spq-   ·   Paste into a Hostinger "Embed code" block.
+  Answers 2–3 quick questions and recommends a service with a link to its intake form.
+  Update the URLs in SPQ_PLANS if any page slug changes.
+-->
+<style>
+  @property --spq-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+  .spq-wrap {
+    --spq-cyan: #00f0ff;
+    --spq-purple: #a855f7;
+    --spq-text: #e8f6ff;
+    --spq-muted: #9fb3c8;
+    --spq-glass: rgba(255, 255, 255, 0.04);
+    --spq-line: rgba(0, 240, 255, 0.18);
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    color: var(--spq-text);
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 8px 16px;
+    box-sizing: border-box;
+  }
+  .spq-wrap *, .spq-wrap *::before, .spq-wrap *::after { box-sizing: border-box; }
+
+  .spq-card {
+    position: relative;
+    border-radius: 22px;
+    padding: 30px;
+    background: var(--spq-glass);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+  .spq-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(from var(--spq-angle), var(--spq-cyan), var(--spq-purple), rgba(0, 240, 255, 0.1) 45%, var(--spq-cyan));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: spq-spin 6s linear infinite;
+    pointer-events: none;
+  }
+
+  .spq-progress { display: flex; gap: 6px; margin-bottom: 22px; }
+  .spq-dot { height: 4px; flex: 1; border-radius: 4px; background: rgba(255, 255, 255, 0.1); transition: background .4s ease; }
+  .spq-dot.spq-on { background: linear-gradient(90deg, var(--spq-cyan), var(--spq-purple)); }
+
+  .spq-step-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--spq-cyan);
+    margin: 0 0 6px;
+  }
+  .spq-question { font-size: 1.35rem; font-weight: 700; line-height: 1.3; margin: 0 0 20px; text-wrap: balance; }
+
+  .spq-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+  .spq-opt {
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    font: inherit;
+    color: var(--spq-text);
+    cursor: pointer;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: rgba(0, 240, 255, 0.04);
+    border: 1px solid var(--spq-line);
+    display: grid;
+    gap: 4px;
+    transition: border-color .25s ease, background .25s ease, transform .2s ease;
+  }
+  .spq-opt::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(0, 240, 255, 0.14) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform .7s ease;
+    pointer-events: none;
+  }
+  .spq-opt:hover { border-color: rgba(0, 240, 255, 0.55); background: rgba(0, 240, 255, 0.08); transform: translateY(-2px); }
+  .spq-opt:hover::after { transform: translateX(100%); }
+  .spq-opt:focus-visible { outline: 2px solid var(--spq-cyan); outline-offset: 2px; }
+  .spq-opt-title { font-weight: 650; font-size: 1rem; }
+  .spq-opt-sub { color: var(--spq-muted); font-size: 0.85rem; line-height: 1.45; }
+
+  .spq-back {
+    margin-top: 18px;
+    background: none;
+    border: 0;
+    color: var(--spq-muted);
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 6px 0;
+  }
+  .spq-back:hover { color: var(--spq-cyan); }
+  .spq-back:focus-visible { outline: 2px solid var(--spq-cyan); outline-offset: 2px; border-radius: 4px; }
+
+  .spq-result { animation: spq-in .45s ease; }
+  .spq-result-name {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0 0 8px;
+    background: linear-gradient(90deg, var(--spq-cyan), var(--spq-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .spq-result-why { color: var(--spq-muted); line-height: 1.6; margin: 0 0 16px; max-width: 60ch; }
+  .spq-perks { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 8px; }
+  .spq-perks li { display: flex; gap: 10px; line-height: 1.45; font-size: 0.95rem; }
+  .spq-perks li::before { content: '✓'; color: var(--spq-cyan); font-weight: 800; }
+  .spq-note {
+    font-size: 0.88rem;
+    color: var(--spq-text);
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin: 0 0 20px;
+    line-height: 1.5;
+  }
+  .spq-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .spq-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #000;
+    background: linear-gradient(90deg, var(--spq-cyan), var(--spq-purple));
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.35);
+    transition: box-shadow .3s ease, transform .2s ease;
+  }
+  .spq-btn:hover { box-shadow: 0 0 34px rgba(168, 85, 247, 0.55); transform: translateY(-2px); }
+  .spq-btn:focus-visible { outline: 2px solid var(--spq-text); outline-offset: 3px; }
+
+  .spq-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @keyframes spq-spin { to { --spq-angle: 360deg; } }
+  @keyframes spq-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 560px) {
+    .spq-card { padding: 22px 18px; }
+    .spq-options { grid-template-columns: 1fr; }
+    .spq-question { font-size: 1.2rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .spq-card::before, .spq-result { animation: none; }
+    .spq-opt, .spq-opt::after, .spq-btn, .spq-dot { transition: none; }
+    .spq-opt:hover, .spq-btn:hover { transform: none; }
+  }
+</style>
+
+<div class="spq-wrap">
+  <div class="spq-card">
+    <h2 class="spq-sr">Find the right Silvea plan</h2>
+    <div class="spq-progress" aria-hidden="true"><span class="spq-dot"></span><span class="spq-dot"></span><span class="spq-dot"></span></div>
+    <div class="spq-stage" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SPQ_PLANS = {
+    personal: {
+      name: 'Personal Website',
+      why: 'A clean, fast site that shows who you are and what you do, built on Hostinger\'s drag-and-drop builder so you can edit it yourself.',
+      perks: ['Mobile-friendly design built around your content', 'Easy to update without code', 'Add pages or features any time'],
+      url: 'https://silvea.tech/personal-websites',
+      cta: 'Start a personal site'
+    },
+    basic: {
+      name: 'Business Website · Basic',
+      why: 'Your business needs to look professional and turn visitors into calls and form fills. The Basic plan covers that without paying for complexity you won\'t use.',
+      perks: ['Contact forms, booking, gallery, and blog available', 'Fast loading on phones', 'Priced per page, with features added as needed'],
+      url: 'https://silvea.tech/business-websites',
+      cta: 'Get a business site quote'
+    },
+    advanced: {
+      name: 'Business Website · Advanced',
+      why: 'Selling online, member logins, and deeper integrations need WordPress. The Advanced plan (+$300) gives you room to grow.',
+      perks: ['Online store and member login', 'Thousands of plugins and integrations', 'Built to scale as your business grows'],
+      url: 'https://silvea.tech/business-websites',
+      cta: 'Get an advanced site quote'
+    },
+    email: {
+      name: 'Business Email',
+      why: 'You don\'t need a website to have professional email. You@yourbusiness.com only needs a domain.',
+      perks: ['Mailboxes on your own domain', 'Set up on your phone and computer', 'Add a website later if you want one'],
+      url: 'https://silvea.tech/business-email',
+      cta: 'Set up business email'
+    },
+    vps: {
+      name: 'Managed VPS Hosting',
+      why: 'You want your own server without spending a weekend configuring it. We handle the setup and hand you the keys.',
+      perks: ['Server set up and ready to use', 'Access details delivered to you', 'No server administration required to start'],
+      url: 'https://silvea.tech/vps-hosting',
+      cta: 'Request a managed VPS'
+    }
+  };
+
+  var DOMAIN_NOTES = {
+    yes: 'You already have a domain. We\'ll connect it for you, so there\'s nothing new to buy.',
+    no: 'You\'ll need a domain. We register it for you as part of setup.'
+  };
+
+  var QUESTIONS = {
+    need: {
+      label: 'Question 1 of 3',
+      q: 'What are you looking for?',
+      options: [
+        { key: 'personal', title: 'A personal website', sub: 'Portfolio, resume, or creative work' },
+        { key: 'business', title: 'A business website', sub: 'Get found, get calls, get bookings' },
+        { key: 'email', title: 'Professional email only', sub: 'you@yourbusiness.com, no site needed' },
+        { key: 'vps', title: 'A server I control', sub: 'Hosting for apps, projects, or tools' }
+      ]
+    },
+    scope: {
+      label: 'Question 2 of 3',
+      q: 'What should the site be able to do?',
+      options: [
+        { key: 'basic', title: 'Show info and collect leads', sub: 'Services, photos, contact and booking forms' },
+        { key: 'advanced', title: 'Sell, or let members log in', sub: 'Online store, accounts, heavy integrations' }
+      ]
+    },
+    domain: {
+      label: 'Question 3 of 3',
+      q: 'Do you already own a domain name?',
+      options: [
+        { key: 'yes', title: 'Yes, I have one', sub: 'Like yourbusiness.com' },
+        { key: 'no', title: 'Not yet', sub: 'We\'ll register one for you' }
+      ]
+    }
+  };
+
+  var root = document.currentScript ? document.currentScript.previousElementSibling : document.querySelector('.spq-wrap');
+  var stage = root.querySelector('.spq-stage');
+  var dots = root.querySelectorAll('.spq-dot');
+  var history = [];
+  var answers = {};
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
+
+  function setProgress(n) {
+    dots.forEach(function (d, i) { d.classList.toggle('spq-on', i < n); });
+  }
+
+  function nextStep(step) {
+    if (step === 'need') {
+      if (answers.need === 'business') return 'scope';
+      if (answers.need === 'vps') return 'result';
+      return 'domain';
+    }
+    if (step === 'scope') return 'domain';
+    return 'result';
+  }
+
+  function showQuestion(step) {
+    var data = QUESTIONS[step];
+    setProgress(history.length + 1);
+    var html = '<p class="spq-step-label">' + esc(data.label) + '</p>' +
+      '<p class="spq-question">' + esc(data.q) + '</p><div class="spq-options">';
+    data.options.forEach(function (o) {
+      html += '<button type="button" class="spq-opt" data-key="' + esc(o.key) + '">' +
+        '<span class="spq-opt-title">' + esc(o.title) + '</span>' +
+        '<span class="spq-opt-sub">' + esc(o.sub) + '</span></button>';
+    });
+    html += '</div>';
+    if (history.length) html += '<button type="button" class="spq-back">← Back</button>';
+    stage.innerHTML = html;
+
+    stage.querySelectorAll('.spq-opt').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        answers[step] = btn.getAttribute('data-key');
+        history.push(step);
+        route(nextStep(step));
+      });
+    });
+    var back = stage.querySelector('.spq-back');
+    if (back) back.addEventListener('click', goBack);
+  }
+
+  function showResult() {
+    setProgress(3);
+    var planKey = answers.need === 'business' ? answers.scope : answers.need;
+    var plan = SPQ_PLANS[planKey];
+    var note = answers.domain ? DOMAIN_NOTES[answers.domain] : '';
+    var html = '<div class="spq-result"><p class="spq-step-label">Your best fit</p>' +
+      '<p class="spq-result-name">' + esc(plan.name) + '</p>' +
+      '<p class="spq-result-why">' + esc(plan.why) + '</p><ul class="spq-perks">';
+    plan.perks.forEach(function (p) { html += '<li>' + esc(p) + '</li>'; });
+    html += '</ul>';
+    if (note) html += '<p class="spq-note">' + esc(note) + '</p>';
+    html += '<div class="spq-actions"><a class="spq-btn" href="' + esc(plan.url) + '" target="_top">' + esc(plan.cta) + ' <span aria-hidden="true">→</span></a>' +
+      '<button type="button" class="spq-back">Start over</button></div></div>';
+    stage.innerHTML = html;
+    stage.querySelector('.spq-back').addEventListener('click', reset);
+  }
+
+  function route(step) { step === 'result' ? showResult() : showQuestion(step); }
+
+  function goBack() {
+    var prev = history.pop();
+    delete answers[prev];
+    route(prev);
+  }
+
+  function reset() { history = []; answers = {}; route('need'); }
+
+  reset();
+})();
+</script>

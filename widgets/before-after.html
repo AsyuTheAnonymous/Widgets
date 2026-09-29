@@ -1,0 +1,211 @@
+<!--
+  Silvea · Before / After Redesign Slider
+  Prefix: sba-   ·   Paste into a Hostinger "Embed code" block.
+
+  SETUP: the two mock illustrations below are placeholders. Replace each <svg>…</svg>
+  with a real screenshot, same size ratio for both (16:10 works well), e.g.
+    <img src="https://…/client-before.jpg" alt="Old Riverbend Bakery homepage">
+  Update the caption text to match the client.
+-->
+<style>
+  .sba-wrap {
+    --sba-cyan: #00f0ff;
+    --sba-purple: #a855f7;
+    --sba-text: #e8f6ff;
+    --sba-muted: #9fb3c8;
+    --sba-pos: 50%;
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    color: var(--sba-text);
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 8px 16px;
+    box-sizing: border-box;
+  }
+  .sba-wrap *, .sba-wrap *::before, .sba-wrap *::after { box-sizing: border-box; }
+
+  .sba-frame {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    max-width: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.12), 0 20px 50px rgba(0, 0, 0, 0.5);
+    user-select: none;
+    touch-action: pan-y;
+  }
+  .sba-layer { position: absolute; inset: 0; }
+  .sba-layer > img, .sba-layer > svg { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .sba-before { clip-path: inset(0 calc(100% - var(--sba-pos)) 0 0); }
+
+  .sba-tag {
+    position: absolute;
+    top: 14px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    pointer-events: none;
+  }
+  .sba-tag-before { left: 14px; color: #fff; background: rgba(0, 0, 0, 0.55); }
+  .sba-tag-after { right: 14px; color: #000; background: linear-gradient(90deg, var(--sba-cyan), var(--sba-purple)); }
+
+  .sba-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--sba-pos);
+    width: 2px;
+    transform: translateX(-1px);
+    background: linear-gradient(var(--sba-cyan), var(--sba-purple));
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.8);
+    pointer-events: none;
+  }
+  .sba-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 46px;
+    height: 46px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(5, 8, 14, 0.75);
+    border: 2px solid var(--sba-cyan);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.55);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: var(--sba-cyan);
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+  }
+
+  .sba-range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .sba-range:focus-visible + .sba-handle .sba-knob { outline: 3px solid var(--sba-text); outline-offset: 3px; }
+
+  .sba-caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 20px;
+    margin-top: 14px;
+    font-size: 0.9rem;
+    color: var(--sba-muted);
+  }
+  .sba-caption strong { color: var(--sba-text); }
+
+
+  @media (max-width: 480px) {
+    .sba-knob { width: 38px; height: 38px; }
+    .sba-tag { top: 10px; font-size: 0.65rem; }
+  }
+</style>
+
+<div class="sba-wrap">
+  <div class="sba-frame">
+    <!-- AFTER (full layer underneath) -->
+    <div class="sba-layer sba-after">
+      <svg viewBox="0 0 800 500" role="img" aria-label="Redesigned homepage: dark layout with a bold headline, glowing button, and three service cards">
+        <defs>
+          <linearGradient id="sba-g1" x1="0" x2="1"><stop offset="0" stop-color="#00f0ff"/><stop offset="1" stop-color="#a855f7"/></linearGradient>
+          <radialGradient id="sba-g2" cx="0.75" cy="0.3" r="0.6"><stop offset="0" stop-color="#a855f7" stop-opacity="0.35"/><stop offset="1" stop-color="#06080d" stop-opacity="0"/></radialGradient>
+        </defs>
+        <rect width="800" height="500" fill="#06080d"/>
+        <rect width="800" height="500" fill="url(#sba-g2)"/>
+        <circle cx="54" cy="36" r="10" fill="url(#sba-g1)"/>
+        <text x="72" y="41" fill="#e8f6ff" font-family="system-ui, sans-serif" font-size="15" font-weight="700">Riverbend Bakery</text>
+        <g fill="#9fb3c8" font-family="system-ui, sans-serif" font-size="12"><text x="480" y="41">Menu</text><text x="535" y="41">Catering</text><text x="605" y="41">Visit</text></g>
+        <rect x="660" y="24" width="96" height="26" rx="13" fill="url(#sba-g1)"/>
+        <text x="682" y="41" fill="#000" font-family="system-ui, sans-serif" font-size="12" font-weight="700">Order now</text>
+        <text x="54" y="150" fill="#e8f6ff" font-family="system-ui, sans-serif" font-size="44" font-weight="800">Fresh from the oven,</text>
+        <text x="54" y="202" fill="url(#sba-g1)" font-family="system-ui, sans-serif" font-size="44" font-weight="800">every morning at 6.</text>
+        <rect x="54" y="228" width="360" height="9" rx="4" fill="#9fb3c8" opacity="0.5"/>
+        <rect x="54" y="246" width="290" height="9" rx="4" fill="#9fb3c8" opacity="0.5"/>
+        <rect x="54" y="280" width="150" height="40" rx="20" fill="url(#sba-g1)"/>
+        <text x="80" y="305" fill="#000" font-family="system-ui, sans-serif" font-size="14" font-weight="700">See today's bakes</text>
+        <g font-family="system-ui, sans-serif">
+          <rect x="54" y="360" width="214" height="104" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#00f0ff" stroke-opacity="0.35"/>
+          <rect x="293" y="360" width="214" height="104" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#00f0ff" stroke-opacity="0.35"/>
+          <rect x="532" y="360" width="214" height="104" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a855f7" stroke-opacity="0.6"/>
+          <text x="74" y="396" fill="#e8f6ff" font-size="15" font-weight="700">Sourdough</text>
+          <text x="313" y="396" fill="#e8f6ff" font-size="15" font-weight="700">Pastries</text>
+          <text x="552" y="396" fill="#e8f6ff" font-size="15" font-weight="700">Custom cakes</text>
+          <rect x="74" y="414" width="150" height="7" rx="3" fill="#9fb3c8" opacity="0.45"/>
+          <rect x="313" y="414" width="150" height="7" rx="3" fill="#9fb3c8" opacity="0.45"/>
+          <rect x="552" y="414" width="150" height="7" rx="3" fill="#9fb3c8" opacity="0.45"/>
+          <rect x="74" y="430" width="110" height="7" rx="3" fill="#9fb3c8" opacity="0.45"/>
+          <rect x="313" y="430" width="110" height="7" rx="3" fill="#9fb3c8" opacity="0.45"/>
+          <rect x="552" y="430" width="110" height="7" rx="3" fill="#9fb3c8" opacity="0.45"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- BEFORE (clipped layer on top) -->
+    <div class="sba-layer sba-before">
+      <svg viewBox="0 0 800 500" role="img" aria-label="Original homepage: cramped layout with a blue banner, sidebar of underlined links, and small text">
+        <rect width="800" height="500" fill="#efeadb"/>
+        <rect width="800" height="70" fill="#27408b"/>
+        <text x="400" y="46" text-anchor="middle" fill="#ffff66" font-family="Times New Roman, serif" font-size="30" font-weight="700">~ RIVERBEND BAKERY ~</text>
+        <rect x="0" y="70" width="800" height="22" fill="#c0c0c0"/>
+        <text x="400" y="86" text-anchor="middle" fill="#8b0000" font-family="Times New Roman, serif" font-size="13" font-style="italic">*** Welcome to our web site!! Best viewed at 1024x768 ***</text>
+        <rect x="16" y="108" width="160" height="376" fill="#dcd5c0" stroke="#999"/>
+        <g fill="#0000ee" font-family="Times New Roman, serif" font-size="15" text-decoration="underline">
+          <text x="30" y="138">Home</text><text x="30" y="166">About Us</text><text x="30" y="194">Our Menu</text>
+          <text x="30" y="222">Catering</text><text x="30" y="250">Guestbook</text><text x="30" y="278">Links</text><text x="30" y="306">Contact</text>
+        </g>
+        <text x="30" y="350" fill="#333" font-family="Times New Roman, serif" font-size="11">Visitors: 004821</text>
+        <text x="196" y="132" fill="#222" font-family="Times New Roman, serif" font-size="22" font-weight="700">Welcome!</text>
+        <g fill="#555" opacity="0.55">
+          <rect x="196" y="148" width="420" height="6"/><rect x="196" y="162" width="440" height="6"/><rect x="196" y="176" width="400" height="6"/>
+          <rect x="196" y="190" width="430" height="6"/><rect x="196" y="204" width="380" height="6"/><rect x="196" y="218" width="410" height="6"/>
+          <rect x="196" y="300" width="560" height="6"/><rect x="196" y="314" width="540" height="6"/><rect x="196" y="328" width="555" height="6"/>
+          <rect x="196" y="342" width="500" height="6"/><rect x="196" y="356" width="545" height="6"/><rect x="196" y="370" width="520" height="6"/>
+          <rect x="196" y="384" width="480" height="6"/><rect x="196" y="398" width="530" height="6"/>
+        </g>
+        <rect x="652" y="120" width="124" height="120" fill="#ffffff" stroke="#999"/>
+        <text x="714" y="186" text-anchor="middle" fill="#999" font-family="Times New Roman, serif" font-size="12">[photo]</text>
+        <rect x="196" y="244" width="120" height="30" fill="#e0e0e0" stroke="#666"/>
+        <text x="256" y="264" text-anchor="middle" fill="#000" font-family="Arial, sans-serif" font-size="12">Click Here!</text>
+        <text x="196" y="440" fill="#0000ee" font-family="Times New Roman, serif" font-size="13" text-decoration="underline">Email us: bakery_riverbend1998@...</text>
+        <text x="196" y="470" fill="#666" font-family="Times New Roman, serif" font-size="11">© 2009 Riverbend Bakery. All rights reserved. Last updated 3/14/2011</text>
+      </svg>
+    </div>
+
+    <span class="sba-tag sba-tag-before">Before</span>
+    <span class="sba-tag sba-tag-after">After</span>
+
+    <input class="sba-range" type="range" min="0" max="100" value="50" step="1" aria-label="Drag to compare the old and new website">
+    <div class="sba-handle" aria-hidden="true"><div class="sba-knob">‹›</div></div>
+  </div>
+
+  <div class="sba-caption">
+    <span><strong>Riverbend Bakery</strong> · Homepage redesign</span>
+    <span>Drag the handle to compare</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.currentScript ? document.currentScript.previousElementSibling : document.querySelector('.sba-wrap');
+  var range = root.querySelector('.sba-range');
+  function update() { root.style.setProperty('--sba-pos', range.value + '%'); }
+  range.addEventListener('input', update);
+  update();
+})();
+</script>

@@ -1,0 +1,224 @@
+<!--
+  Silvea · Domain Name Idea Generator
+  Prefix: sdn-   ·   Paste into a Hostinger "Embed code" block.
+  Turns a business name (and optional town) into domain ideas with a copy button and a
+  "Request" link to the domain intake page. It does not check availability; that
+  happens when the request comes in. Update SDN_REQUEST_URL if the slug changes.
+-->
+<style>
+  .sdn-wrap {
+    --sdn-cyan: #00f0ff;
+    --sdn-purple: #a855f7;
+    --sdn-text: #e8f6ff;
+    --sdn-muted: #9fb3c8;
+    --sdn-glass: rgba(255, 255, 255, 0.04);
+    --sdn-line: rgba(0, 240, 255, 0.2);
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    color: var(--sdn-text);
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 8px 16px;
+    box-sizing: border-box;
+  }
+  .sdn-wrap *, .sdn-wrap *::before, .sdn-wrap *::after { box-sizing: border-box; }
+
+  .sdn-panel {
+    padding: 26px;
+    border-radius: 22px;
+    background: var(--sdn-glass);
+    border: 1px solid var(--sdn-line);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+
+  .sdn-inputs { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; }
+  .sdn-field { display: grid; gap: 6px; min-width: 0; }
+  .sdn-label { font-size: 0.82rem; font-weight: 600; }
+  .sdn-label em { font-style: normal; font-weight: 400; color: var(--sdn-muted); }
+  .sdn-input {
+    width: 100%;
+    font: inherit;
+    color: var(--sdn-text);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--sdn-line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  .sdn-input:focus { outline: none; border-color: var(--sdn-cyan); box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15), 0 0 18px rgba(0, 240, 255, 0.2); }
+
+  .sdn-list { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 8px; }
+  .sdn-row {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 12px 12px 16px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    background: rgba(0, 240, 255, 0.035);
+    transition: border-color .25s ease, background .25s ease;
+    animation: sdn-in .35s ease both;
+  }
+  .sdn-row::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(0, 240, 255, 0.12) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform .7s ease;
+    pointer-events: none;
+  }
+  .sdn-row:hover { border-color: var(--sdn-line); background: rgba(0, 240, 255, 0.07); }
+  .sdn-row:hover::after { transform: translateX(100%); }
+
+  .sdn-domain {
+    flex: 1;
+    min-width: 0;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+  }
+  .sdn-domain b { color: var(--sdn-cyan); font-weight: 600; }
+  .sdn-kind {
+    flex: none;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sdn-muted);
+    border: 1px solid rgba(159, 179, 200, 0.3);
+    border-radius: 999px;
+    padding: 3px 8px;
+  }
+  .sdn-kind.sdn-best { color: #000; border-color: transparent; background: linear-gradient(90deg, var(--sdn-cyan), var(--sdn-purple)); font-weight: 700; }
+
+  .sdn-copy, .sdn-req {
+    flex: none;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+    padding: 7px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+  }
+  .sdn-copy { background: transparent; color: var(--sdn-muted); border: 1px solid rgba(159, 179, 200, 0.3); }
+  .sdn-copy:hover { color: var(--sdn-text); border-color: var(--sdn-cyan); }
+  .sdn-req { color: #000; background: linear-gradient(90deg, var(--sdn-cyan), var(--sdn-purple)); border: 0; box-shadow: 0 0 14px rgba(0, 240, 255, 0.3); }
+  .sdn-req:hover { box-shadow: 0 0 22px rgba(168, 85, 247, 0.55); }
+  .sdn-copy:focus-visible, .sdn-req:focus-visible { outline: 2px solid var(--sdn-cyan); outline-offset: 2px; }
+
+  .sdn-empty { margin: 22px 0 0; color: var(--sdn-muted); font-size: 0.92rem; }
+  .sdn-fine { margin: 16px 0 0; font-size: 0.8rem; color: var(--sdn-muted); line-height: 1.5; }
+
+  @keyframes sdn-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 560px) {
+    .sdn-panel { padding: 20px 16px; }
+    .sdn-inputs { grid-template-columns: 1fr; }
+    .sdn-row { flex-wrap: wrap; }
+    .sdn-domain { flex-basis: 100%; }
+    .sdn-kind { margin-right: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sdn-row { animation: none; }
+    .sdn-row, .sdn-row::after, .sdn-input { transition: none; }
+  }
+</style>
+
+<div class="sdn-wrap">
+  <div class="sdn-panel">
+    <div class="sdn-inputs">
+      <div class="sdn-field">
+        <label class="sdn-label" for="sdn-name">Business name</label>
+        <input class="sdn-input" id="sdn-name" type="text" value="Riverbend Bakery" autocomplete="organization" placeholder="e.g. Riverbend Bakery">
+      </div>
+      <div class="sdn-field">
+        <label class="sdn-label" for="sdn-town">Town or area <em>(optional)</em></label>
+        <input class="sdn-input" id="sdn-town" type="text" value="Wetumpka" placeholder="e.g. Wetumpka">
+      </div>
+    </div>
+    <ul class="sdn-list" aria-live="polite"></ul>
+    <p class="sdn-fine">These are ideas, not availability checks. When you request one, we confirm it's available and register it in your name.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var SDN_REQUEST_URL = 'https://silvea.tech/domain-registration';
+  var STOP = ['the', 'and', 'of', 'llc', 'inc', 'co', 'company'];
+
+  var root = document.currentScript ? document.currentScript.previousElementSibling : document.querySelector('.sdn-wrap');
+  var nameEl = root.querySelector('#sdn-name');
+  var townEl = root.querySelector('#sdn-town');
+  var list = root.querySelector('.sdn-list');
+
+  function words(s) {
+    return s.toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9\s-]/g, ' ').split(/\s+/)
+      .filter(function (w) { return w && STOP.indexOf(w) === -1; });
+  }
+
+  function ideas(name, town) {
+    var w = words(name);
+    if (!w.length) return [];
+    var base = w.join('');
+    var t = words(town).join('');
+    var initials = w.length > 1 ? w.map(function (x) { return x[0]; }).join('') : '';
+    var out = [
+      { d: base + '.com', k: 'Best match' },
+      { d: w.join('-') + '.com', k: 'Hyphenated', skip: w.length < 2 },
+      { d: base + t + '.com', k: 'Local', skip: !t },
+      { d: t + base + '.com', k: 'Local', skip: !t || w.length > 2 },
+      { d: base + '.net', k: 'Alt ending' },
+      { d: base + '.co', k: 'Short ending' },
+      { d: 'shop' + base + '.com', k: 'Action' },
+      { d: base + 'hq.com', k: 'Brand' },
+      { d: initials + t + '.com', k: 'Short', skip: !initials || !t }
+    ];
+    var seen = {};
+    return out.filter(function (o) {
+      if (o.skip || seen[o.d] || o.d.split('.')[0].length > 40) return false;
+      seen[o.d] = true;
+      return true;
+    }).slice(0, 7);
+  }
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
+
+  function render() {
+    var items = ideas(nameEl.value, townEl.value);
+    if (!items.length) {
+      list.innerHTML = '<li class="sdn-empty">Type your business name to see ideas.</li>';
+      return;
+    }
+    list.innerHTML = items.map(function (o, i) {
+      var parts = o.d.split('.');
+      var href = SDN_REQUEST_URL + '?domain=' + encodeURIComponent(o.d);
+      return '<li class="sdn-row" style="animation-delay:' + (i * 40) + 'ms">' +
+        '<span class="sdn-domain">' + esc(parts[0]) + '<b>.' + esc(parts[1]) + '</b></span>' +
+        '<span class="sdn-kind' + (i === 0 ? ' sdn-best' : '') + '">' + esc(o.k) + '</span>' +
+        '<button type="button" class="sdn-copy" data-domain="' + esc(o.d) + '">Copy</button>' +
+        '<a class="sdn-req" href="' + esc(href) + '" target="_top">Request</a></li>';
+    }).join('');
+  }
+
+  list.addEventListener('click', function (e) {
+    var btn = e.target.closest('.sdn-copy');
+    if (!btn) return;
+    var d = btn.getAttribute('data-domain');
+    function done(ok) { btn.textContent = ok ? 'Copied' : d; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(d).then(function () { done(true); }, function () { done(false); });
+    } else { done(false); }
+  });
+
+  var t;
+  function queue() { clearTimeout(t); t = setTimeout(render, 180); }
+  nameEl.addEventListener('input', queue);
+  townEl.addEventListener('input', queue);
+  render();
+})();
+</script>

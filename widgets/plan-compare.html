@@ -1,0 +1,217 @@
+<!--
+  Silvea · Website Plan Comparison (Basic vs Advanced)
+  Prefix: scp-   ·   Paste into a Hostinger "Embed code" block.
+  Feature availability mirrors the Website Inquiry form (Web-inquiry.html) — keep them in sync.
+  On phones the table shows one plan at a time with a toggle.
+-->
+<style>
+  @property --scp-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+  .scp-wrap {
+    --scp-cyan: #00f0ff;
+    --scp-purple: #a855f7;
+    --scp-text: #e8f6ff;
+    --scp-muted: #9fb3c8;
+    --scp-glass: rgba(255, 255, 255, 0.04);
+    --scp-line: rgba(0, 240, 255, 0.16);
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    color: var(--scp-text);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 8px 16px;
+    box-sizing: border-box;
+  }
+  .scp-wrap *, .scp-wrap *::before, .scp-wrap *::after { box-sizing: border-box; }
+
+  .scp-toggle { display: none; }
+
+  .scp-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 20px;
+    background: var(--scp-glass);
+    border: 1px solid var(--scp-line);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    overflow: hidden;
+  }
+  .scp-table th, .scp-table td { padding: 15px 20px; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--scp-line); }
+  .scp-table tbody tr:last-child th, .scp-table tbody tr:last-child td { border-bottom: 0; }
+  .scp-table tbody th { font-weight: 500; color: var(--scp-muted); font-size: 0.93rem; width: 34%; }
+  .scp-table td { font-size: 0.95rem; }
+
+  .scp-plan { vertical-align: bottom; padding-top: 24px; padding-bottom: 20px; }
+  .scp-plan-name { display: block; font-size: 1.25rem; font-weight: 800; }
+  .scp-plan-tag { display: block; margin-top: 4px; font-size: 0.82rem; font-weight: 500; color: var(--scp-muted); }
+  .scp-badge {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #000;
+    background: linear-gradient(90deg, var(--scp-cyan), var(--scp-purple));
+  }
+
+  /* Highlighted Advanced column */
+  .scp-hl { background: linear-gradient(180deg, rgba(168, 85, 247, 0.1), rgba(0, 240, 255, 0.04)); }
+  thead .scp-hl { position: relative; }
+  thead .scp-hl::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 3px;
+    background: conic-gradient(from var(--scp-angle), var(--scp-cyan), var(--scp-purple), var(--scp-cyan));
+    animation: scp-spin 5s linear infinite;
+  }
+
+  .scp-yes, .scp-no { display: inline-flex; align-items: center; gap: 8px; }
+  .scp-yes::before, .scp-no::before {
+    content: '';
+    flex: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .scp-yes::before { background-color: rgba(0, 240, 255, 0.15); box-shadow: inset 0 0 0 1px rgba(0, 240, 255, 0.6);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.2l2.6 2.6L10 3.4' fill='none' stroke='%2300f0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+  .scp-no { color: var(--scp-muted); }
+  .scp-no::before { box-shadow: inset 0 0 0 1px rgba(159, 179, 200, 0.35);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5h6' stroke='%239fb3c8' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"); }
+
+  .scp-price { font-size: 1.15rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .scp-price small { font-size: 0.78rem; font-weight: 500; color: var(--scp-muted); }
+
+  .scp-btn {
+    display: inline-block;
+    padding: 11px 20px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--scp-text);
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    transition: background .25s ease, box-shadow .25s ease;
+  }
+  .scp-btn:hover { background: rgba(0, 240, 255, 0.1); box-shadow: 0 0 18px rgba(0, 240, 255, 0.25); }
+  .scp-btn-main { color: #000; border-color: transparent; background: linear-gradient(90deg, var(--scp-cyan), var(--scp-purple)); box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); }
+  .scp-btn-main:hover { background: linear-gradient(90deg, var(--scp-cyan), var(--scp-purple)); box-shadow: 0 0 30px rgba(168, 85, 247, 0.5); }
+  .scp-btn:focus-visible { outline: 2px solid var(--scp-text); outline-offset: 3px; }
+
+  @keyframes scp-spin { to { --scp-angle: 360deg; } }
+
+  /* Phone: one plan column at a time */
+  @media (max-width: 600px) {
+    .scp-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 14px;
+      border-radius: 999px;
+      border: 1px solid var(--scp-line);
+      background: var(--scp-glass);
+    }
+    .scp-toggle button {
+      font: inherit;
+      font-weight: 650;
+      font-size: 0.92rem;
+      padding: 10px;
+      border: 0;
+      border-radius: 999px;
+      color: var(--scp-muted);
+      background: transparent;
+      cursor: pointer;
+    }
+    .scp-toggle button[aria-pressed="true"] { color: #000; background: linear-gradient(90deg, var(--scp-cyan), var(--scp-purple)); }
+    .scp-toggle button:focus-visible { outline: 2px solid var(--scp-cyan); outline-offset: 2px; }
+    .scp-table th, .scp-table td { padding: 13px 14px; }
+    .scp-table tbody th { width: 48%; }
+    .scp-wrap[data-show="basic"] .scp-col-adv,
+    .scp-wrap[data-show="advanced"] .scp-col-basic { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    thead .scp-hl::before { animation: none; }
+    .scp-btn { transition: none; }
+  }
+</style>
+
+<div class="scp-wrap" data-show="advanced">
+  <div class="scp-toggle" role="group" aria-label="Choose a plan to view">
+    <button type="button" data-plan="basic" aria-pressed="false">Basic</button>
+    <button type="button" data-plan="advanced" aria-pressed="true">Advanced</button>
+  </div>
+
+  <table class="scp-table">
+    <thead>
+      <tr>
+        <th scope="col"><span class="scp-plan-tag">Compare plans</span></th>
+        <th scope="col" class="scp-plan scp-col-basic">
+          <span class="scp-plan-name">Basic</span>
+          <span class="scp-plan-tag">Hostinger drag-and-drop builder</span>
+        </th>
+        <th scope="col" class="scp-plan scp-col-adv scp-hl">
+          <span class="scp-badge">Most flexible</span>
+          <span class="scp-plan-name">Advanced</span>
+          <span class="scp-plan-tag">WordPress platform</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">Plan price</th>
+        <td class="scp-col-basic"><span class="scp-price">Included <small>base</small></span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-price">+$300 <small>one-time</small></span></td></tr>
+      <tr><th scope="row">Pages</th>
+        <td class="scp-col-basic"><span class="scp-price">$100 <small>/ page</small></span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-price">$100 <small>/ page</small></span></td></tr>
+      <tr><th scope="row">Best for</th>
+        <td class="scp-col-basic">Small businesses and portfolios</td>
+        <td class="scp-col-adv scp-hl">Stores, memberships, complex needs</td></tr>
+      <tr><th scope="row">Mobile-friendly design</th>
+        <td class="scp-col-basic"><span class="scp-yes">Yes</span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-yes">Yes</span></td></tr>
+      <tr><th scope="row">Contact forms &amp; booking</th>
+        <td class="scp-col-basic"><span class="scp-yes">Yes</span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-yes">Yes</span></td></tr>
+      <tr><th scope="row">Blog, gallery, newsletter</th>
+        <td class="scp-col-basic"><span class="scp-yes">Yes</span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-yes">Yes</span></td></tr>
+      <tr><th scope="row">Multi-language</th>
+        <td class="scp-col-basic"><span class="scp-yes">Yes</span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-yes">Yes</span></td></tr>
+      <tr><th scope="row">Online store</th>
+        <td class="scp-col-basic"><span class="scp-no">Not available</span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-yes">Yes</span></td></tr>
+      <tr><th scope="row">Member login</th>
+        <td class="scp-col-basic"><span class="scp-no">Not available</span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-yes">Yes</span></td></tr>
+      <tr><th scope="row">AI chatbot</th>
+        <td class="scp-col-basic"><span class="scp-no">Not available</span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-yes">Yes</span></td></tr>
+      <tr><th scope="row">Plugins &amp; integrations</th>
+        <td class="scp-col-basic"><span class="scp-no">Built-in tools</span></td>
+        <td class="scp-col-adv scp-hl"><span class="scp-yes">Thousands</span></td></tr>
+      <tr><th scope="row"></th>
+        <td class="scp-col-basic"><a class="scp-btn" href="https://silvea.tech/get-a-quote" target="_top">Quote Basic</a></td>
+        <td class="scp-col-adv scp-hl"><a class="scp-btn scp-btn-main" href="https://silvea.tech/get-a-quote" target="_top">Quote Advanced</a></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+(function () {
+  var root = document.currentScript ? document.currentScript.previousElementSibling : document.querySelector('.scp-wrap');
+  var buttons = root.querySelectorAll('.scp-toggle button');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      root.setAttribute('data-show', btn.getAttribute('data-plan'));
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+    });
+  });
+})();
+</script>

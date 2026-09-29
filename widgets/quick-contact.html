@@ -1,0 +1,240 @@
+<!--
+  Silvea · Quick Contact Form (Web3Forms)
+  Prefix: scq-   ·   Paste into a Hostinger "Embed code" block.
+
+  SETUP: replace YOUR_WEB3FORMS_ACCESS_KEY in the hidden access_key input below.
+  The JS guard compares against the same placeholder string, so while the placeholder
+  is still in place the form shows the fallback message instead of sending a doomed request.
+-->
+<style>
+  .scq-wrap {
+    --scq-cyan: #00f0ff;
+    --scq-purple: #a855f7;
+    --scq-text: #e8f6ff;
+    --scq-muted: #9fb3c8;
+    --scq-glass: rgba(255, 255, 255, 0.04);
+    --scq-line: rgba(0, 240, 255, 0.22);
+    --scq-ok: #34d399;
+    --scq-err: #fb7185;
+    font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    color: var(--scq-text);
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 8px 16px;
+    box-sizing: border-box;
+  }
+  .scq-wrap *, .scq-wrap *::before, .scq-wrap *::after { box-sizing: border-box; }
+
+  .scq-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+    padding: 30px;
+    border-radius: 22px;
+    background: var(--scq-glass);
+    border: 1px solid var(--scq-line);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.06);
+  }
+  .scq-full { grid-column: 1 / -1; }
+
+  .scq-field { display: grid; gap: 7px; min-width: 0; }
+  .scq-label { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em; }
+  .scq-label em { font-style: normal; color: var(--scq-muted); font-weight: 400; }
+
+  .scq-input, .scq-select, .scq-textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 0.97rem;
+    color: var(--scq-text);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--scq-line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  .scq-select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--scq-cyan) 50%), linear-gradient(135deg, var(--scq-cyan) 50%, transparent 50%);
+    background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 40px; }
+  .scq-select option { background: #0b0f14; color: var(--scq-text); }
+  .scq-textarea { resize: vertical; min-height: 120px; }
+  .scq-input::placeholder, .scq-textarea::placeholder { color: rgba(159, 179, 200, 0.6); }
+  .scq-input:focus, .scq-select:focus, .scq-textarea:focus {
+    outline: none;
+    border-color: var(--scq-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15), 0 0 18px rgba(0, 240, 255, 0.2);
+  }
+  .scq-input[aria-invalid="true"], .scq-textarea[aria-invalid="true"] { border-color: var(--scq-err); }
+
+  .scq-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .scq-chip { position: relative; }
+  .scq-chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .scq-chip span {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--scq-line);
+    font-size: 0.88rem;
+    color: var(--scq-muted);
+    transition: all .2s ease;
+  }
+  .scq-chip input:checked + span { color: #000; font-weight: 650; border-color: transparent; background: linear-gradient(90deg, var(--scq-cyan), var(--scq-purple)); }
+  .scq-chip input:focus-visible + span { outline: 2px solid var(--scq-cyan); outline-offset: 2px; }
+
+  .scq-hp { display: none; }
+
+  .scq-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+  .scq-fine { margin: 0; font-size: 0.8rem; color: var(--scq-muted); }
+
+  .scq-btn {
+    position: relative;
+    overflow: hidden;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    color: #000;
+    padding: 14px 30px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--scq-cyan), var(--scq-purple));
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.35);
+    transition: box-shadow .3s ease, transform .2s ease, opacity .2s ease;
+  }
+  .scq-btn:hover { box-shadow: 0 0 34px rgba(168, 85, 247, 0.55); transform: translateY(-2px); }
+  .scq-btn:focus-visible { outline: 2px solid var(--scq-text); outline-offset: 3px; }
+  .scq-btn[disabled] { opacity: 0.65; cursor: progress; transform: none; }
+
+  .scq-status { margin: 0; font-size: 0.92rem; line-height: 1.5; border-radius: 12px; padding: 0; }
+  .scq-status:not(:empty) { padding: 12px 14px; }
+  .scq-status[data-type="ok"] { color: var(--scq-ok); background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.35); }
+  .scq-status[data-type="err"] { color: var(--scq-err); background: rgba(251, 113, 133, 0.08); border: 1px solid rgba(251, 113, 133, 0.35); }
+  .scq-status a { color: inherit; font-weight: 700; }
+
+  @media (max-width: 560px) {
+    .scq-form { grid-template-columns: 1fr; padding: 22px 18px; }
+    .scq-btn { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scq-btn, .scq-chip span, .scq-input, .scq-select, .scq-textarea { transition: none; }
+    .scq-btn:hover { transform: none; }
+  }
+</style>
+
+<div class="scq-wrap">
+  <form class="scq-form" novalidate>
+    <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+    <input type="hidden" name="subject" value="Quick Contact — silvea.tech">
+    <input type="hidden" name="from_name" value="Silvea Website · Quick Contact">
+    <input type="checkbox" name="botcheck" class="scq-hp" tabindex="-1" autocomplete="off">
+
+    <div class="scq-field">
+      <label class="scq-label" for="scq-name">Your name</label>
+      <input class="scq-input" id="scq-name" name="name" type="text" autocomplete="name" placeholder="Jordan Reyes" required>
+    </div>
+    <div class="scq-field">
+      <label class="scq-label" for="scq-email">Email</label>
+      <input class="scq-input" id="scq-email" name="email" type="email" autocomplete="email" placeholder="jordan@example.com" required>
+    </div>
+    <div class="scq-field">
+      <label class="scq-label" for="scq-phone">Phone <em>(optional)</em></label>
+      <input class="scq-input" id="scq-phone" name="phone" type="tel" autocomplete="tel" placeholder="(334) 555-0142">
+    </div>
+    <div class="scq-field">
+      <label class="scq-label" for="scq-time">Best way to reach you</label>
+      <select class="scq-select" id="scq-time" name="contact_preference">
+        <option>Email is fine</option>
+        <option>Call me in the morning</option>
+        <option>Call me in the afternoon</option>
+        <option>Text me</option>
+      </select>
+    </div>
+
+    <fieldset class="scq-field scq-full" style="border:0;padding:0;margin:0;">
+      <legend class="scq-label" style="margin-bottom:7px;">What's it about?</legend>
+      <div class="scq-chips">
+        <label class="scq-chip"><input type="radio" name="topic" value="Website" checked><span>Website</span></label>
+        <label class="scq-chip"><input type="radio" name="topic" value="Business email"><span>Business email</span></label>
+        <label class="scq-chip"><input type="radio" name="topic" value="Managed VPS"><span>Managed VPS</span></label>
+        <label class="scq-chip"><input type="radio" name="topic" value="Domain"><span>Domain</span></label>
+        <label class="scq-chip"><input type="radio" name="topic" value="Site migration"><span>Site migration</span></label>
+        <label class="scq-chip"><input type="radio" name="topic" value="Something else"><span>Something else</span></label>
+      </div>
+    </fieldset>
+
+    <div class="scq-field scq-full">
+      <label class="scq-label" for="scq-msg">Message</label>
+      <textarea class="scq-textarea" id="scq-msg" name="message" placeholder="Tell us a little about your business and what you need." required></textarea>
+    </div>
+
+    <p class="scq-status scq-full" role="status" aria-live="polite"></p>
+
+    <div class="scq-foot scq-full">
+      <p class="scq-fine">We reply within one business day.</p>
+      <button class="scq-btn" type="submit">Send message</button>
+    </div>
+  </form>
+</div>
+
+<script>
+(function () {
+  var PLACEHOLDER_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
+  var FALLBACK_URL = 'https://silvea.tech/contact';
+
+  var root = document.currentScript ? document.currentScript.previousElementSibling : document.querySelector('.scq-wrap');
+  var form = root.querySelector('.scq-form');
+  var status = form.querySelector('.scq-status');
+  var btn = form.querySelector('.scq-btn');
+
+  function say(type, html) { status.setAttribute('data-type', type); status.innerHTML = html; }
+
+  function validate() {
+    var ok = true;
+    ['scq-name', 'scq-email', 'scq-msg'].forEach(function (id) {
+      var el = form.querySelector('#' + id);
+      var bad = !el.value.trim() || (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim()));
+      el.setAttribute('aria-invalid', bad ? 'true' : 'false');
+      if (bad && ok) { el.focus(); ok = false; }
+    });
+    return ok;
+  }
+
+  form.addEventListener('input', function (e) {
+    if (e.target.getAttribute('aria-invalid') === 'true') e.target.setAttribute('aria-invalid', 'false');
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!validate()) { say('err', 'Please fill in your name, a valid email, and a message.'); return; }
+
+    var key = form.querySelector('input[name="access_key"]').value;
+    if (!key || key === PLACEHOLDER_KEY) {
+      say('err', 'This form isn\'t connected yet. Please reach us through the <a href="' + FALLBACK_URL + '" target="_top">contact page</a>.');
+      return;
+    }
+
+    var label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    say('', '');
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(form)
+    })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok && d.success, d: d }; }); })
+      .then(function (res) {
+        if (res.ok) {
+          say('ok', 'Thanks! Your message is on its way. We\'ll get back to you within one business day.');
+          form.reset();
+        } else {
+          say('err', 'That didn\'t go through (' + (res.d && res.d.message ? res.d.message : 'unknown error') + '). Please try again or use the <a href="' + FALLBACK_URL + '" target="_top">contact page</a>.');
+        }
+      })
+      .catch(function () {
+        say('err', 'We couldn\'t reach the server. Check your connection and try again.');
+      })
+      .finally(function () { btn.disabled = false; btn.textContent = label; });
+  });
+})();
+</script>
